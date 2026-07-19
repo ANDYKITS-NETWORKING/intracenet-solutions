@@ -29,6 +29,7 @@ export default function Navbar() {
           <DesktopNav />
           <TopBar />
         
+
           <CTAButton />
         </nav>
       </Container>
