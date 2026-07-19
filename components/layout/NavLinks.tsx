@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { navigation } from "@/constants/navigation";
+import { navigation, NavItem } from "@/constants/navigation";
 
 interface NavLinksProps {
   mobile?: boolean;
@@ -18,7 +18,7 @@ export default function NavLinks({ mobile = false }: NavLinksProps) {
       <div className="flex flex-col gap-2">
         {navigation.map((item) => (
           <div key={item.label}>
-            {item.dropdown ? (
+            {item.dropdown && item.dropdown.length > 0 ? (
               <>
                 <button
                   onClick={() =>
@@ -72,7 +72,7 @@ export default function NavLinks({ mobile = false }: NavLinksProps) {
           onMouseEnter={() => setOpenDropdown(item.label)}
           onMouseLeave={() => setOpenDropdown(null)}
         >
-          {item.dropdown ? (
+          {item.dropdown && item.dropdown.length > 0 ? (
             <>
               <button
                 className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition hover:bg-slate-800 hover:text-white ${
