@@ -27,9 +27,7 @@ export default function MobileNavbar({
     };
 
     handleScroll();
-
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -69,8 +67,7 @@ export default function MobileNavbar({
           ${scrolled ? "h-14" : "h-16"}
         `}
       >
-        {/* Logo */}
-
+        {/* Logo - Small Minimal Version */}
         <Link href="/" className="flex items-center">
           <motion.div
             whileHover={{
@@ -80,32 +77,33 @@ export default function MobileNavbar({
               scale: 0.96,
             }}
             animate={{
-              scale: scrolled ? 0.95 : 1,
+              scale: scrolled ? 0.92 : 1,
             }}
             transition={{
               duration: 0.25,
             }}
+            className="flex items-center gap-2"
           >
-            <Image
-              src="/logos/logo.png"
-              alt="Intracenet Solutions"
-              width={170}
-              height={44}
-              priority
-              className="
-                h-auto
-                w-[145px]
-                select-none
-              "
-            />
+            {/* Small icon instead of full logo */}
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-emerald-500 flex items-center justify-center shadow-lg shadow-primary/20">
+              <span className="text-white font-bold text-sm">I</span>
+            </div>
+            
+            {/* Brand name - clean and minimal */}
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-slate-900 dark:text-white leading-none tracking-tight">
+                Intracenet
+              </span>
+              <span className="text-[8px] uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 leading-none">
+                Solutions
+              </span>
+            </div>
           </motion.div>
         </Link>
 
         {/* Right Side */}
-
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {/* Search */}
-
           <motion.button
             whileHover={{
               y: -2,
@@ -118,8 +116,8 @@ export default function MobileNavbar({
             aria-label="Search"
             className="
               flex
-              h-11
-              w-11
+              h-9
+              w-9
               items-center
               justify-center
               rounded-xl
@@ -139,11 +137,10 @@ export default function MobileNavbar({
               dark:text-slate-300
             "
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-4 w-4" />
           </motion.button>
 
           {/* Menu */}
-
           <AnimatedMenuButton
             open={menuOpen}
             onClick={onMenuOpen}
@@ -152,7 +149,6 @@ export default function MobileNavbar({
       </div>
 
       {/* Animated Brand Accent */}
-
       <motion.div
         initial={{ scaleX: 0 }}
         animate={{
