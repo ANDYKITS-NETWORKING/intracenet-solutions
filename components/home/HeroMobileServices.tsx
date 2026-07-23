@@ -314,7 +314,8 @@ function TrustBadges() {
 }
 // ============================================================
 // ============================================================
-// HERO HEADER COMPONENT - ULTIMATE FIX
+// ============================================================
+// HERO HEADER COMPONENT - COMPLETE FIX
 // ============================================================
 function HeroHeader() {
   return (
@@ -349,13 +350,21 @@ function HeroHeader() {
         Trusted Enterprise ICT Partner
       </motion.div>
 
-      {/* ✅ ULTIMATE FIX: Single line with smaller text */}
-      <div className="max-w-[260px] sm:max-w-sm mx-auto px-3">
+      {/* ✅ FIXED: Split into two lines for better readability */}
+      <div className="max-w-[280px] sm:max-w-sm mx-auto px-3">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
           className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
+        >
+          Engineering
+        </motion.h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.6 }}
+          className="text-xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight"
         >
           Reliable Digital Infrastructure
         </motion.h2>
@@ -366,7 +375,7 @@ function HeroHeader() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="mt-3 text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-lg leading-relaxed max-w-[260px] sm:max-w-sm mx-auto px-4"
+        className="mt-3 text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-lg leading-relaxed max-w-[280px] sm:max-w-sm mx-auto px-4"
       >
         Intracenet Solutions delivers enterprise networking, cybersecurity, cloud, fiber infrastructure and electrical engineering solutions that empower businesses across East Africa.
       </motion.p>
@@ -431,7 +440,6 @@ function HeroHeader() {
     </motion.div>
   );
 }
-// ============================================================
 // TECHNICAL BACKGROUND ANIMATION
 // ============================================================
 function TechnicalBackground() {
@@ -1020,7 +1028,7 @@ function MobileServicesCarousel() {
 }
 
 // ============================================================
-// WHY CHOOSE INTRACENET SECTION
+// WHY CHOOSE SECTION - FIXED TEXT CUTOFF
 // ============================================================
 function WhyChooseSection() {
   const reasons = [
@@ -1059,7 +1067,7 @@ function WhyChooseSection() {
           Why Choose Intracenet
         </p>
         <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">
-          Built for Enterprise
+          Enterprise Solutions
         </h3>
       </div>
 
@@ -1083,7 +1091,7 @@ function WhyChooseSection() {
               <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
                 {reason.title}
               </h4>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 leading-tight">
                 {reason.description}
               </p>
             </motion.div>
@@ -1093,7 +1101,6 @@ function WhyChooseSection() {
     </motion.div>
   );
 }
-
 // ============================================================
 // MAIN COMPONENT
 // ============================================================
