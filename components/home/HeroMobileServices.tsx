@@ -323,7 +323,7 @@ function HeroHeader() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="text-center relative z-10 pt-6 pb-12 md:pt-20 md:pb-24"
+      className="text-center relative z-10 pt-6 pb-12 md:pt-20 md:pb-24 w-full overflow-visible"
     >
       {/* Small Logo */}
       <motion.div
@@ -350,13 +350,13 @@ function HeroHeader() {
         Trusted Enterprise ICT Partner
       </motion.div>
 
-      {/* ✅ FIXED: Split into two lines for better readability */}
-      <div className="max-w-[280px] sm:max-w-sm mx-auto px-3">
+      {/* ✅ FIXED: Removed max-width constraints */}
+      <div className="w-full px-3 overflow-visible">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
+          className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight whitespace-normal break-words"
         >
           Engineering
         </motion.h2>
@@ -364,18 +364,18 @@ function HeroHeader() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.35, duration: 0.6 }}
-          className="text-xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight"
+          className="text-xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight whitespace-normal break-words"
         >
           Reliable Digital Infrastructure
         </motion.h2>
       </div>
 
-      {/* Description */}
+      {/* Description - Fixed */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="mt-3 text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-lg leading-relaxed max-w-[280px] sm:max-w-sm mx-auto px-4"
+        className="mt-3 text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-lg leading-relaxed w-full px-4 overflow-visible"
       >
         Intracenet Solutions delivers enterprise networking, cybersecurity, cloud, fiber infrastructure and electrical engineering solutions that empower businesses across East Africa.
       </motion.p>
@@ -1102,7 +1102,7 @@ function WhyChooseSection() {
   );
 }
 // ============================================================
-// MAIN COMPONENT
+// MAIN COMPONENT - FIXED
 // ============================================================
 export default function HeroMobileServices() {
   return (
@@ -1111,7 +1111,7 @@ export default function HeroMobileServices() {
         relative
         min-h-screen
         w-full
-        overflow-x-hidden
+        overflow-visible  /* ← CHANGED from overflow-x-hidden */
         bg-gradient-to-b
         from-slate-50
         via-white
@@ -1125,7 +1125,7 @@ export default function HeroMobileServices() {
       <TechnicalBackground />
 
       {/* Main Content */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">
         {/* Hero */}
         <HeroHeader />
 
