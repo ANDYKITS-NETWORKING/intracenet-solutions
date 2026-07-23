@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { trackEvent, trackServiceView } from '@/lib/gtag';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -35,6 +34,19 @@ import {
 import { useEffect, useRef, useState, useCallback } from "react";
 
 // ============================================================
+// GLOBAL TYPE DECLARATION FOR GTAG
+// ============================================================
+declare global {
+  interface Window {
+    gtag?: (
+      command: string,
+      eventName?: string,
+      params?: Record<string, unknown>
+    ) => void;
+  }
+}
+
+// ============================================================
 // UTILITY FUNCTIONS FOR SAFE CLIENT-SIDE ACCESS
 // ============================================================
 const isClient = typeof window !== 'undefined';
@@ -45,16 +57,27 @@ const safeVibrate = (duration: number) => {
   }
 };
 
-const safeGtag = (event: string, data: any) => {
-  if (isClient && (window as any).gtag) {
-    (window as any).gtag(event, data);
-  }
+// ============================================================
+// IMPROVED SAFE GTAG FUNCTION
+// ============================================================
+const safeGtag = (
+  command: string,
+  eventName?: string,
+  params?: Record<string, unknown>
+) => {
+  if (!isClient) return;
+  window.gtag?.(command, eventName, params);
 };
 
 const safeShare = async (data: { title: string; text: string; url: string }) => {
   if (isClient && navigator.share) {
     try {
       await navigator.share(data);
+      // Track share event
+      safeGtag('event', 'share_content', {
+        method: 'web_share_api',
+        title: data.title,
+      });
     } catch (error) {
       console.log('Share cancelled');
     }
@@ -206,7 +229,6 @@ const technicalPatterns = [
 // ============================================================
 // FIXED CIRCUIT PATH - No Math.random() during render
 // ============================================================
-// Pre-define circuit paths to avoid hydration mismatch
 const circuitPaths = [
   "M0 200 L150 150 L200 250 L350 200 L400 300 L550 250",
   "M0 150 L100 200 L180 120 L280 180 L350 100 L500 150",
@@ -523,35 +545,71 @@ function MobileServicesCarousel() {
     const nextIndex = (activeIndex + 1) % services.length;
     scrollToCard(nextIndex);
     safeVibrate(5);
+    
+    // Track navigation
+    safeGtag('event', 'carousel_navigate', {
+      direction: 'next',
+      current_index: activeIndex,
+      next_index: nextIndex,
+    });
   }, [activeIndex, scrollToCard]);
 
   const handlePrev = useCallback(() => {
     const prevIndex = activeIndex === 0 ? services.length - 1 : activeIndex - 1;
     scrollToCard(prevIndex);
     safeVibrate(5);
+    
+    // Track navigation
+    safeGtag('event', 'carousel_navigate', {
+      direction: 'prev',
+      current_index: activeIndex,
+      next_index: prevIndex,
+    });
   }, [activeIndex, scrollToCard]);
 
   const handleCardTap = useCallback((index: number, title: string) => {
     safeVibrate(10);
+    
+    // Track service view with improved gtag
     safeGtag('event', 'view_service_card', {
       service: title,
       position: index + 1,
+      category: 'engagement',
     });
   }, []);
 
   const toggleBookmark = useCallback((e: React.MouseEvent, title: string) => {
     e.preventDefault();
     e.stopPropagation();
-    setBookmarked(prev => 
-      prev.includes(title) ? prev.filter(t => t !== title) : [...prev, title]
-    );
+    
+    const isBookmarked = bookmarked.includes(title);
+    const newBookmarks = isBookmarked 
+      ? bookmarked.filter(t => t !== title) 
+      : [...bookmarked, title];
+    
+    setBookmarked(newBookmarks);
     safeVibrate(5);
-  }, []);
+    
+    // Track bookmark with improved gtag
+    safeGtag('event', 'toggle_bookmark', {
+      service: title,
+      action: isBookmarked ? 'remove' : 'add',
+      category: 'engagement',
+    });
+  }, [bookmarked]);
 
   const toggleExpand = useCallback((title: string) => {
+    const isExpanding = expandedId !== title;
     setExpandedId(prev => prev === title ? null : title);
     safeVibrate(10);
-  }, []);
+    
+    // Track expand with improved gtag
+    safeGtag('event', 'toggle_card_expand', {
+      service: title,
+      action: isExpanding ? 'expand' : 'collapse',
+      category: 'engagement',
+    });
+  }, [expandedId]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -687,7 +745,6 @@ function MobileServicesCarousel() {
           const isExpanded = expandedId === service.title;
           const isBookmarked = bookmarked.includes(service.title);
           const ServiceIcon = serviceIcons[service.title as keyof typeof serviceIcons];
-          // Use pre-defined path, fallback to a default if index out of range
           const circuitPath = circuitPaths[index % circuitPaths.length];
 
           return (
@@ -960,6 +1017,12 @@ function ContactSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted');
+    
+    // Track form submission
+    safeGtag('event', 'contact_form_submit', {
+      form_name: 'contact',
+      category: 'conversion',
+    });
   };
 
   return (
