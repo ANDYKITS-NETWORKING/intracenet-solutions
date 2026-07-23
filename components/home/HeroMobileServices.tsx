@@ -58,12 +58,14 @@ const safeVibrate = (duration: number) => {
 };
 
 // ============================================================
-// IMPROVED SAFE GTAG FUNCTION
+// IMPROVED SAFE GTAG FUNCTION - FIXED
 // ============================================================
+type GtagParams = Record<string, unknown>;
+
 const safeGtag = (
   command: string,
   eventName?: string,
-  params?: Record<string, unknown>
+  params?: GtagParams
 ) => {
   if (!isClient) return;
   window.gtag?.(command, eventName, params);
