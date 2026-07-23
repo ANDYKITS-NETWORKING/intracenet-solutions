@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 import Container from "@/components/common/Container";
@@ -37,7 +38,7 @@ export default function Navbar() {
     >
       <Container>
         <nav className="flex h-20 items-center justify-between">
-          {/* Logo - Small Professional Version */}
+          {/* ✅ FIXED: Only Logo Image - No text */}
           <Link href="/" className="flex items-center">
             <motion.div
               whileHover={{
@@ -52,21 +53,18 @@ export default function Navbar() {
               transition={{
                 duration: 0.25,
               }}
-              className="flex items-center gap-3"
+              className="flex items-center"
             >
-              {/* Icon */}
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-emerald-500 flex items-center justify-center shadow-lg shadow-primary/20">
-                <span className="text-white font-bold text-lg tracking-tight">I</span>
-              </div>
-              
-              {/* Brand Name */}
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-slate-900 dark:text-white leading-none tracking-tight">
-                  Intracenet
-                </span>
-                <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 leading-none">
-                  Solutions
-                </span>
+              {/* Only the logo image - removed text */}
+              <div className="w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-primary/20 flex-shrink-0">
+                <Image
+                  src="/logos/logo.png"
+                  alt="Intracenet Solutions"
+                  width={40}
+                  height={40}
+                  className="w-full h-full object-cover"
+                  priority
+                />
               </div>
             </motion.div>
           </Link>

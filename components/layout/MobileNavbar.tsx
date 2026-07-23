@@ -67,7 +67,7 @@ export default function MobileNavbar({
           ${scrolled ? "h-14" : "h-16"}
         `}
       >
-        {/* Logo - Small Minimal Version */}
+        {/* ✅ FIXED: Only Logo Image - No text */}
         <Link href="/" className="flex items-center">
           <motion.div
             whileHover={{
@@ -82,21 +82,18 @@ export default function MobileNavbar({
             transition={{
               duration: 0.25,
             }}
-            className="flex items-center gap-2"
+            className="flex items-center"
           >
-            {/* Small icon instead of full logo */}
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-emerald-500 flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="text-white font-bold text-sm">I</span>
-            </div>
-            
-            {/* Brand name - clean and minimal */}
-            <div className="flex flex-col">
-              <span className="text-sm font-bold text-slate-900 dark:text-white leading-none tracking-tight">
-                Intracenet
-              </span>
-              <span className="text-[8px] uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 leading-none">
-                Solutions
-              </span>
+            {/* Only the logo image - removed text */}
+            <div className="w-8 h-8 rounded-full overflow-hidden shadow-lg shadow-primary/20 flex-shrink-0">
+              <Image
+                src="/logos/logo.png"
+                alt="Intracenet Solutions"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover"
+                priority
+              />
             </div>
           </motion.div>
         </Link>
