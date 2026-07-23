@@ -30,6 +30,10 @@ import {
   Wifi,
   Database,
   Globe,
+  PhoneCall,
+  MessageCircle,
+  Mail as MailIcon,
+  Star,
 } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 
@@ -57,9 +61,6 @@ const safeVibrate = (duration: number) => {
   }
 };
 
-// ============================================================
-// IMPROVED SAFE GTAG FUNCTION - FIXED
-// ============================================================
 type GtagParams = Record<string, unknown>;
 
 const safeGtag = (
@@ -75,7 +76,6 @@ const safeShare = async (data: { title: string; text: string; url: string }) => 
   if (isClient && navigator.share) {
     try {
       await navigator.share(data);
-      // Track share event
       safeGtag('event', 'share_content', {
         method: 'web_share_api',
         title: data.title,
@@ -241,106 +241,168 @@ const circuitPaths = [
 ];
 
 // ============================================================
-// HERO HEADER COMPONENT
+// QUICK ACTION BUTTONS COMPONENT
+// ============================================================
+function QuickActions() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.8 }}
+      className="flex items-center justify-center gap-4 mt-6"
+    >
+      <motion.a
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.95 }}
+        href="tel:+254700000000"
+        className="p-3 rounded-full bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 transition-all"
+        aria-label="Call us"
+      >
+        <PhoneCall className="h-5 w-5" />
+      </motion.a>
+      
+      <motion.a
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.95 }}
+        href="https://wa.me/254700000000"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="p-3 rounded-full bg-green-500/10 text-green-500 hover:bg-green-500/20 transition-all"
+        aria-label="WhatsApp us"
+      >
+        <MessageCircle className="h-5 w-5" />
+      </motion.a>
+      
+      <motion.a
+        whileHover={{ scale: 1.1, y: -2 }}
+        whileTap={{ scale: 0.95 }}
+        href="mailto:info@intracenetsolutions.com"
+        className="p-3 rounded-full bg-blue-500/10 text-blue-500 hover:bg-blue-500/20 transition-all"
+        aria-label="Email us"
+      >
+        <MailIcon className="h-5 w-5" />
+      </motion.a>
+    </motion.div>
+  );
+}
+
+// ============================================================
+// TRUST BADGES COMPONENT
+// ============================================================
+function TrustBadges() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5 }}
+      className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-500 dark:text-slate-400 mt-4"
+    >
+      <div className="flex items-center gap-1">
+        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+        <span className="ml-1 font-medium text-slate-700 dark:text-slate-300">Trusted by Businesses</span>
+      </div>
+      <span className="hidden sm:inline text-slate-300 dark:text-slate-600">•</span>
+      <span>99.99% Network Uptime</span>
+      <span className="hidden sm:inline text-slate-300 dark:text-slate-600">•</span>
+      <span>Serving East Africa</span>
+    </motion.div>
+  );
+}
+
+// ============================================================
+// HERO HEADER COMPONENT - FIXED
 // ============================================================
 function HeroHeader() {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="text-center mb-12 relative z-10"
+      transition={{ duration: 0.6 }}
+      className="text-center relative z-10 pt-10 pb-16 md:pt-20 md:pb-24"
     >
+      {/* Small Logo - Only this one */}
       <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
+        initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
+        transition={{ delay: 0.1, duration: 0.5 }}
         className="inline-block mb-4"
       >
-        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
           Intracenet
         </h1>
-        <p className="text-sm md:text-base uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-semibold mt-1">
+        <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-semibold mt-0.5">
           Solutions • Connecting You Faster
         </p>
       </motion.div>
 
-      <motion.p
+      {/* Badge */}
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.6 }}
-        className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto"
+        transition={{ delay: 0.2 }}
+        className="inline-block bg-primary/10 px-4 py-1.5 rounded-full text-primary font-semibold text-xs mb-4"
       >
-        <span className="inline-block bg-primary/10 px-4 py-1 rounded-full text-primary font-semibold text-sm mb-2">
-          Trusted Enterprise ICT Partner
-        </span>
-        <br />
-        <span className="text-2xl md:text-3xl font-semibold text-slate-800 dark:text-white">
-          Engineering Infrastructure
-        </span>
-      </motion.p>
+        Trusted Enterprise ICT Partner
+      </motion.div>
 
+      {/* Animated Heading - Each line fades up */}
+      <div className="space-y-1 max-w-sm mx-auto">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
+        >
+          Engineering
+        </motion.h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight"
+        >
+          Reliable Digital
+        </motion.h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
+        >
+          Infrastructure
+        </motion.h2>
+      </div>
+
+      {/* Description - Limited width for readability */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.6 }}
-        className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-base"
+        transition={{ delay: 0.6 }}
+        className="mt-4 text-slate-600 dark:text-slate-400 text-base md:text-lg leading-relaxed max-w-sm mx-auto"
       >
-        Intracenet Solutions delivers enterprise networking, cybersecurity, cloud, 
-        fiber infrastructure and electrical engineering solutions that empower 
-        businesses across East Africa.
+        Intracenet Solutions delivers enterprise fiber infrastructure and 
+        electrical engineering businesses across East Africa.
       </motion.p>
 
-      {/* Stats Row */}
+      {/* Trust Badges */}
+      <TrustBadges />
+
+      {/* CTA Buttons - Centered, not too wide */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
-        className="mt-8 flex flex-wrap justify-center gap-6 md:gap-12"
-      >
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-full bg-primary/10">
-            <Building2 className="h-5 w-5 text-primary" />
-          </div>
-          <div>
-            <div className="text-xl font-bold text-slate-800 dark:text-white">250+</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">Projects Delivered</div>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-full bg-emerald-500/10">
-            <Headphones className="h-5 w-5 text-emerald-500" />
-          </div>
-          <div>
-            <div className="text-xl font-bold text-slate-800 dark:text-white">24/7</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">Technical Support</div>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-full bg-blue-500/10">
-            <Users className="h-5 w-5 text-blue-500" />
-          </div>
-          <div>
-            <div className="text-xl font-bold text-slate-800 dark:text-white">99.99%</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">Network Availability</div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* CTA Buttons */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.6 }}
-        className="mt-8 flex flex-wrap justify-center gap-4"
+        transition={{ delay: 0.7 }}
+        className="mt-6 flex flex-col items-center gap-3"
       >
         <Link href="/contact">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-primary text-white rounded-full font-semibold shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2"
+            className="px-8 py-3 bg-primary text-white rounded-full font-semibold shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2 text-sm"
           >
             Request Consultation
             <ArrowRight className="h-4 w-4" />
@@ -351,18 +413,44 @@ function HeroHeader() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 border-2 border-primary/20 text-primary rounded-full font-semibold hover:bg-primary/5 transition-all"
+            className="text-sm text-primary hover:text-primary/80 font-semibold transition-colors"
           >
-            Explore Services
+            Explore Services →
           </motion.button>
         </Link>
+      </motion.div>
+
+      {/* Quick Actions - Call, WhatsApp, Email */}
+      <QuickActions />
+
+      {/* Stats Row - Small and elegant */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.9 }}
+        className="mt-8 flex flex-wrap justify-center gap-6 text-center"
+      >
+        <div>
+          <div className="text-lg font-bold text-slate-800 dark:text-white">250+</div>
+          <div className="text-[10px] text-slate-500 dark:text-slate-400">Projects</div>
+        </div>
+        <div className="w-px bg-slate-200 dark:bg-slate-700" />
+        <div>
+          <div className="text-lg font-bold text-slate-800 dark:text-white">24/7</div>
+          <div className="text-[10px] text-slate-500 dark:text-slate-400">Support</div>
+        </div>
+        <div className="w-px bg-slate-200 dark:bg-slate-700" />
+        <div>
+          <div className="text-lg font-bold text-slate-800 dark:text-white">EA</div>
+          <div className="text-[10px] text-slate-500 dark:text-slate-400">Coverage</div>
+        </div>
       </motion.div>
     </motion.div>
   );
 }
 
 // ============================================================
-// TECHNICAL BACKGROUND ANIMATION - FIXED
+// TECHNICAL BACKGROUND ANIMATION
 // ============================================================
 function TechnicalBackground() {
   const [windowWidth, setWindowWidth] = useState(0);
@@ -489,7 +577,7 @@ function TechnicalBackground() {
 }
 
 // ============================================================
-// MOBILE SERVICES CAROUSEL - FIXED HYDRATION
+// MOBILE SERVICES CAROUSEL
 // ============================================================
 function MobileServicesCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -503,7 +591,6 @@ function MobileServicesCarousel() {
   const [isAtEnd, setIsAtEnd] = useState(false);
   const [showScrollHint, setShowScrollHint] = useState(true);
 
-  // Track scroll position and active card
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -547,8 +634,6 @@ function MobileServicesCarousel() {
     const nextIndex = (activeIndex + 1) % services.length;
     scrollToCard(nextIndex);
     safeVibrate(5);
-    
-    // Track navigation
     safeGtag('event', 'carousel_navigate', {
       direction: 'next',
       current_index: activeIndex,
@@ -560,8 +645,6 @@ function MobileServicesCarousel() {
     const prevIndex = activeIndex === 0 ? services.length - 1 : activeIndex - 1;
     scrollToCard(prevIndex);
     safeVibrate(5);
-    
-    // Track navigation
     safeGtag('event', 'carousel_navigate', {
       direction: 'prev',
       current_index: activeIndex,
@@ -571,8 +654,6 @@ function MobileServicesCarousel() {
 
   const handleCardTap = useCallback((index: number, title: string) => {
     safeVibrate(10);
-    
-    // Track service view with improved gtag
     safeGtag('event', 'view_service_card', {
       service: title,
       position: index + 1,
@@ -591,8 +672,6 @@ function MobileServicesCarousel() {
     
     setBookmarked(newBookmarks);
     safeVibrate(5);
-    
-    // Track bookmark with improved gtag
     safeGtag('event', 'toggle_bookmark', {
       service: title,
       action: isBookmarked ? 'remove' : 'add',
@@ -604,8 +683,6 @@ function MobileServicesCarousel() {
     const isExpanding = expandedId !== title;
     setExpandedId(prev => prev === title ? null : title);
     safeVibrate(10);
-    
-    // Track expand with improved gtag
     safeGtag('event', 'toggle_card_expand', {
       service: title,
       action: isExpanding ? 'expand' : 'collapse',
@@ -613,7 +690,6 @@ function MobileServicesCarousel() {
     });
   }, [expandedId]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight') handleNext();
@@ -623,7 +699,6 @@ function MobileServicesCarousel() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrev]);
 
-  // AUTO SLIDE RIGHT TO LEFT - INFINITE LOOP
   useEffect(() => {
     if (!isAutoPlaying || isDragging || expandedId) return;
     
@@ -648,74 +723,38 @@ function MobileServicesCarousel() {
 
   return (
     <div 
-      className="mt-12 relative"
+      className="mt-8 relative"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onTouchStart={() => setIsAutoPlaying(false)}
       onTouchEnd={() => setTimeout(() => setIsAutoPlaying(true), 3000)}
     >
       {/* Section Header */}
-      <div className="flex items-center justify-between mb-6 relative z-10">
+      <div className="flex items-center justify-between mb-4 relative z-10">
         <div>
-          <p className="text-xs uppercase tracking-[0.35em] text-primary font-semibold">
+          <p className="text-[10px] uppercase tracking-[0.35em] text-primary font-semibold">
             Our Expertise
           </p>
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">
             Enterprise Solutions
           </h3>
         </div>
         <div className="flex items-center gap-2">
           {isAutoPlaying && (
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ repeat: Infinity, duration: 1 }}
-              className="hidden sm:flex items-center gap-1"
-            >
-              <span className="text-[8px] uppercase tracking-wider text-emerald-500 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">
-                Auto
-              </span>
-            </motion.div>
+            <span className="text-[8px] uppercase tracking-wider text-emerald-500 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">
+              Auto
+            </span>
           )}
-          <span className="hidden sm:inline rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-            {activeIndex + 1} / {services.length}
+          <span className="text-xs font-mono text-slate-400">
+            {activeIndex + 1}/{services.length}
           </span>
-          <motion.span
-            animate={showScrollHint ? { x: [0, 10, 0] } : { opacity: 0 }}
-            transition={{ repeat: showScrollHint ? Infinity : 0, duration: 1.5 }}
-            className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
-          >
-            Swipe →
-          </motion.span>
         </div>
-      </div>
-
-      {/* Navigation Buttons */}
-      <div className="hidden sm:flex justify-between mb-4 relative z-10">
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handlePrev}
-          className="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-all"
-          aria-label="Previous card"
-        >
-          <ChevronLeft className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-        </motion.button>
-        
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleNext}
-          className="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-all"
-          aria-label="Next card"
-        >
-          <ChevronRight className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-        </motion.button>
       </div>
 
       {/* Carousel */}
       <div
         ref={containerRef}
-        className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 scrollbar-hide relative -mx-4 px-4"
+        className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-hide relative -mx-4 px-4"
         onTouchStart={() => {
           setIsDragging(true);
           setIsAutoPlaying(false);
@@ -756,22 +795,19 @@ function MobileServicesCarousel() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.08, type: "spring", stiffness: 120 }}
-              whileHover={{ y: -6, scale: 1.02 }}
-              className="min-w-[300px] max-w-[300px] snap-center flex-shrink-0 relative"
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="min-w-[280px] max-w-[280px] snap-center flex-shrink-0 relative"
               role="listitem"
             >
               <Link href={service.href} onClick={() => handleCardTap(index, service.title)}>
-                <div className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-2xl p-6 shadow-xl transition-all duration-500 dark:border-slate-700 dark:bg-slate-900/80 hover:shadow-2xl">
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white/80 backdrop-blur-2xl p-5 shadow-lg transition-all duration-500 dark:border-slate-700 dark:bg-slate-900/80 hover:shadow-xl">
                   
                   {/* Background Image with Overlay */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/90 dark:from-slate-950/95 dark:to-slate-900/95" />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      {ServiceIcon && <ServiceIcon className="w-32 h-32 text-white/5" />}
+                      {ServiceIcon && <ServiceIcon className="w-24 h-24 text-white/5" />}
                     </div>
-                    <div className="absolute inset-0" style={{
-                      backgroundImage: `radial-gradient(circle at 30% 40%, rgba(37,99,235,0.1) 0%, transparent 60%)`,
-                    }} />
                   </div>
 
                   {/* Glow Effect */}
@@ -780,10 +816,10 @@ function MobileServicesCarousel() {
                     style={{ mixBlendMode: "soft-light" }}
                   />
 
-                  <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-primary/5 blur-3xl group-hover:scale-150 transition-transform duration-700" />
+                  <div className="absolute -top-20 -right-20 w-32 h-32 rounded-full bg-primary/5 blur-3xl group-hover:scale-150 transition-transform duration-700" />
 
-                  {/* Animated Circuit Pattern in Background - FIXED: No Math.random() */}
-                  <svg className="absolute inset-0 w-full h-full opacity-[0.03] dark:opacity-[0.06] pointer-events-none">
+                  {/* Circuit Pattern */}
+                  <svg className="absolute inset-0 w-full h-full opacity-[0.02] dark:opacity-[0.04] pointer-events-none">
                     <motion.path
                       d={circuitPath}
                       stroke="#2563eb"
@@ -800,9 +836,9 @@ function MobileServicesCarousel() {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.08 + 0.2 }}
-                    className="absolute top-4 right-4 z-10"
+                    className="absolute top-3 right-3 z-10"
                   >
-                    <span className={`text-[10px] font-mono font-semibold px-2 py-1 rounded-full ${
+                    <span className={`text-[8px] font-mono font-semibold px-2 py-0.5 rounded-full ${
                       service.badge === 'Popular' ? 'bg-blue-500/20 text-blue-500' :
                       service.badge === 'Critical' ? 'bg-red-500/20 text-red-500' :
                       service.badge === 'Enterprise' ? 'bg-purple-500/20 text-purple-500' :
@@ -819,12 +855,12 @@ function MobileServicesCarousel() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={(e) => toggleBookmark(e, service.title)}
-                    className="absolute top-4 left-4 z-10 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                    className="absolute top-3 left-3 z-10 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                   >
                     {isBookmarked ? (
-                      <BookmarkCheck className="h-4 w-4 text-primary" />
+                      <BookmarkCheck className="h-3.5 w-3.5 text-primary" />
                     ) : (
-                      <Bookmark className="h-4 w-4 text-slate-400" />
+                      <Bookmark className="h-3.5 w-3.5 text-slate-400" />
                     )}
                   </motion.button>
 
@@ -832,17 +868,17 @@ function MobileServicesCarousel() {
                   <motion.div
                     whileHover={{ rotate: 8, scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 400 }}
-                    className="relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                    className="relative mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 group-hover:bg-primary/20 transition-colors"
                   >
-                    <Icon className="h-8 w-8 text-primary" />
+                    <Icon className="h-6 w-6 text-primary" />
                   </motion.div>
 
                   {/* Content */}
                   <div className="relative z-10">
-                    <h4 className="text-xl font-bold text-slate-900 dark:text-white">
+                    <h4 className="text-base font-bold text-slate-900 dark:text-white">
                       {service.title}
                     </h4>
-                    <p className="mt-2 leading-7 text-slate-500 dark:text-slate-400">
+                    <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">
                       {service.description}
                     </p>
 
@@ -853,7 +889,7 @@ function MobileServicesCarousel() {
                       className="mt-2 flex items-center gap-2"
                     >
                       <TrendingUp className="h-3 w-3 text-emerald-500" />
-                      <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
+                      <span className="text-[10px] font-medium text-slate-600 dark:text-slate-300">
                         {service.stats}
                       </span>
                     </motion.div>
@@ -865,7 +901,7 @@ function MobileServicesCarousel() {
                           animate={{ opacity: 1, height: "auto" }}
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="mt-4 space-y-2 overflow-hidden"
+                          className="mt-3 space-y-1.5 overflow-hidden"
                         >
                           {service.features.map((feature, i) => (
                             <motion.div
@@ -873,7 +909,7 @@ function MobileServicesCarousel() {
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: i * 0.1 }}
-                              className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
+                              className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300"
                             >
                               <CheckCircle className="h-3 w-3 text-primary" />
                               <span>{feature}</span>
@@ -883,7 +919,7 @@ function MobileServicesCarousel() {
                           <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="mt-2 w-full py-2 bg-primary/10 text-primary rounded-lg text-sm font-semibold hover:bg-primary/20 transition-colors"
+                            className="mt-2 w-full py-1.5 bg-primary/10 text-primary rounded-lg text-xs font-semibold hover:bg-primary/20 transition-colors"
                           >
                             {service.cta}
                           </motion.button>
@@ -893,17 +929,17 @@ function MobileServicesCarousel() {
                   </div>
 
                   {/* Footer */}
-                  <div className="mt-6 flex items-center justify-between relative z-10">
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-semibold text-primary">
+                  <div className="mt-4 flex items-center justify-between relative z-10">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-primary">
                         Learn More
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono">
+                      <span className="text-[8px] text-slate-400 font-mono">
                         #{index + 1}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                       <motion.button
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -919,7 +955,7 @@ function MobileServicesCarousel() {
                       </motion.button>
 
                       <motion.div whileHover={{ x: 4 }}>
-                        <ArrowRight className="h-5 w-5 text-primary" />
+                        <ArrowRight className="h-4 w-4 text-primary" />
                       </motion.div>
                     </div>
                   </div>
@@ -929,11 +965,11 @@ function MobileServicesCarousel() {
                     initial={{ scaleX: 0 }}
                     whileHover={{ scaleX: 1 }}
                     transition={{ duration: 0.35, type: "spring", stiffness: 200 }}
-                    className={`absolute left-0 top-0 h-1 w-full origin-left bg-gradient-to-r ${service.color}`}
+                    className={`absolute left-0 top-0 h-0.5 w-full origin-left bg-gradient-to-r ${service.color}`}
                   />
 
-                  <div className="absolute bottom-4 right-4 z-10">
-                    <span className="text-[8px] font-mono uppercase text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
+                  <div className="absolute bottom-3 right-3 z-10">
+                    <span className="text-[6px] font-mono uppercase text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded-full">
                       {service.tag}
                     </span>
                   </div>
@@ -945,32 +981,26 @@ function MobileServicesCarousel() {
       </div>
 
       {/* Controls */}
-      <div className="mt-6 space-y-4 relative z-10">
-        <div className="h-1 w-full max-w-xs mx-auto bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden relative">
+      <div className="mt-4 space-y-3 relative z-10">
+        <div className="h-0.5 w-full max-w-xs mx-auto bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden relative">
           <motion.div 
             className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
             style={{ width: `${scrollProgress}%` }}
             transition={{ type: "spring", damping: 30 }}
           />
-          <motion.div
-            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full shadow-lg"
-            style={{ left: `calc(${scrollProgress}% - 6px)` }}
-            animate={{ scale: [1, 1.3, 1] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          />
         </div>
 
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex items-center justify-center gap-3">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleShare}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <Share2 className="h-4 w-4 text-slate-400" />
           </motion.button>
 
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {services.map((_, i) => (
               <motion.button
                 key={i}
@@ -978,10 +1008,10 @@ function MobileServicesCarousel() {
                   scrollToCard(i);
                   safeVibrate(5);
                 }}
-                className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
+                className={`h-2 w-2 rounded-full transition-all duration-300 ${
                   i === activeIndex 
                     ? 'bg-primary shadow-lg shadow-primary/30' 
-                    : 'bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500'
+                    : 'bg-slate-300 dark:bg-slate-600'
                 }`}
                 animate={i === activeIndex ? { scale: [1, 1.3, 1] } : { scale: 1 }}
                 transition={{ repeat: i === activeIndex ? Infinity : 0, duration: 2 }}
@@ -989,16 +1019,11 @@ function MobileServicesCarousel() {
             ))}
           </div>
 
-          <span className="text-xs font-mono text-slate-400 min-w-[30px] text-center">
-            {activeIndex + 1}/{services.length}
-          </span>
-
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-            aria-label={isAutoPlaying ? "Pause auto-play" : "Resume auto-play"}
+            className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             {isAutoPlaying ? (
               <span className="text-xs text-slate-400">⏸</span>
@@ -1013,19 +1038,31 @@ function MobileServicesCarousel() {
 }
 
 // ============================================================
-// CONTACT SECTION
+// WHY CHOOSE INTRACENET SECTION
 // ============================================================
-function ContactSection() {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted');
-    
-    // Track form submission
-    safeGtag('event', 'contact_form_submit', {
-      form_name: 'contact',
-      category: 'conversion',
-    });
-  };
+function WhyChooseSection() {
+  const reasons = [
+    {
+      icon: ShieldCheck,
+      title: "Enterprise Grade",
+      description: "Solutions built for business-critical operations",
+    },
+    {
+      icon: Users,
+      title: "Expert Team",
+      description: "Certified engineers with years of experience",
+    },
+    {
+      icon: Zap,
+      title: "Fast Delivery",
+      description: "Rapid deployment with minimal disruption",
+    },
+    {
+      icon: Globe,
+      title: "East Africa Coverage",
+      description: "Supporting businesses across the region",
+    },
+  ];
 
   return (
     <motion.div
@@ -1033,195 +1070,43 @@ function ContactSection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="mt-20 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-3xl p-8 md:p-12 border border-slate-200 dark:border-slate-700 relative overflow-hidden"
+      className="mt-16"
     >
-      {/* Background pattern for contact section */}
-      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 50%)
-          `,
-        }} />
+      <div className="text-center mb-6">
+        <p className="text-[10px] uppercase tracking-[0.35em] text-primary font-semibold">
+          Why Choose Intracenet
+        </p>
+        <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-1">
+          Built for Enterprise
+        </h3>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 relative z-10">
-        {/* Left Side - Text */}
-        <div>
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white"
-          >
-            Let's Build Your Next ICT Solution
-          </motion.h2>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mt-4 text-slate-600 dark:text-slate-400 leading-relaxed"
-          >
-            Whether you're planning a network upgrade, cloud migration, 
-            cybersecurity deployment or fiber infrastructure project, 
-            we'd love to hear from you.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="mt-6 space-y-3"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-primary/10">
-                <Mail className="h-4 w-4 text-primary" />
-              </div>
-              <span className="text-sm text-slate-600 dark:text-slate-300">info@intracenetsolutions.com</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-primary/10">
-                <Phone className="h-4 w-4 text-primary" />
-              </div>
-              <span className="text-sm text-slate-600 dark:text-slate-300">+254 700 000 000</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-full bg-primary/10">
-                <MapPin className="h-4 w-4 text-primary" />
-              </div>
-              <span className="text-sm text-slate-600 dark:text-slate-300">Nairobi, Kenya</span>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-6 flex gap-4"
-          >
-            <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-8 w-8 rounded-full bg-slate-300 dark:bg-slate-600 border-2 border-white dark:border-slate-800 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">
-                  {String.fromCharCode(64 + i)}
-                </div>
-              ))}
-            </div>
-            <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center">
-              Trusted by 250+ businesses
-            </span>
-          </motion.div>
-        </div>
-
-        {/* Right Side - Form */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-lg"
-        >
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
-            Send us a Message
-          </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-            Fill in the form below and one of our consultants will contact you within 24 hours.
-          </p>
-          
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="John"
-                  className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Doe"
-                  className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                Email Address
-              </label>
-              <input
-                type="email"
-                placeholder="john@example.com"
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                placeholder="+254 700 000 000"
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                Company
-              </label>
-              <input
-                type="text"
-                placeholder="Company Name"
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                Service Interested In
-              </label>
-              <select
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
-              >
-                <option value="">Select a Service</option>
-                {services.map((service) => (
-                  <option key={service.title} value={service.title}>
-                    {service.title}
-                  </option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                Message
-              </label>
-              <textarea
-                placeholder="Tell us about your project..."
-                rows={3}
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm resize-none"
-              />
-            </div>
-            
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              className="w-full py-3 bg-primary text-white rounded-lg font-semibold shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center justify-center gap-2"
+      <div className="grid grid-cols-2 gap-3">
+        {reasons.map((reason, index) => {
+          const Icon = reason.icon;
+          return (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ y: -4, scale: 1.02 }}
+              className="p-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm text-center"
             >
-              Send Message
-              <Send className="h-4 w-4" />
-            </motion.button>
-          </form>
-        </motion.div>
+              <div className="flex justify-center mb-2">
+                <div className="p-2 rounded-full bg-primary/10">
+                  <Icon className="h-5 w-5 text-primary" />
+                </div>
+              </div>
+              <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
+                {reason.title}
+              </h4>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                {reason.description}
+              </p>
+            </motion.div>
+          );
+        })}
       </div>
     </motion.div>
   );
@@ -1236,15 +1121,15 @@ export default function HeroMobileServices() {
       {/* Technical Background */}
       <TechnicalBackground />
       
-      <div className="relative mx-auto max-w-7xl px-4 py-12 md:py-20">
-        {/* Hero Header */}
+      <div className="relative mx-auto max-w-7xl px-4">
+        {/* Hero Header - Fixed spacing */}
         <HeroHeader />
 
         {/* Mobile Services Carousel with Auto Slide */}
         <MobileServicesCarousel />
 
-        {/* Contact Section */}
-        <ContactSection />
+        {/* Why Choose Intracenet Section */}
+        <WhyChooseSection />
       </div>
     </section>
   );
