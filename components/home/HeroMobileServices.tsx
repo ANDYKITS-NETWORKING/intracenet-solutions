@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { trackEvent, trackServiceView } from '@/lib/gtag';
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
