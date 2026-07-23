@@ -6,6 +6,7 @@ import HeroBackground from "./HeroBackground";
 import HeroNetwork from "./HeroNetwork";
 import HeroContent from "./HeroContent";
 import HeroServices from "./HeroServices";
+import HeroMobileServices from "./HeroMobileServices";
 
 export default function Hero() {
   return (
@@ -13,17 +14,19 @@ export default function Hero() {
       <section
         className="
           relative
-          overflow-hidden
           min-h-screen
-          flex
-          items-center
-          py-24
+          overflow-hidden
+          py-20
+          lg:flex
+          lg:items-center
           lg:py-32
         "
       >
-        {/* Enterprise Network Animation */}
+        {/* Desktop Network Visualization */}
 
-        <HeroNetwork />
+        <div className="hidden lg:block">
+          <HeroNetwork />
+        </div>
 
         <Container>
           <div
@@ -32,17 +35,32 @@ export default function Hero() {
               z-20
               grid
               items-center
-              gap-20
+              gap-16
               lg:grid-cols-2
+              lg:gap-20
             "
           >
-            {/* Left Side */}
+            {/* =======================================================
+                LEFT SIDE
+            ======================================================= */}
 
-            <HeroContent />
+            <div className="flex flex-col">
+              <HeroContent />
 
-            {/* Right Side */}
+              {/* Mobile Services */}
 
-            <HeroServices />
+              <div className="mt-10 lg:hidden">
+                <HeroMobileServices />
+              </div>
+            </div>
+
+            {/* =======================================================
+                RIGHT SIDE (Desktop Only)
+            ======================================================= */}
+
+            <div className="hidden lg:flex justify-end">
+              <HeroServices />
+            </div>
           </div>
         </Container>
       </section>
