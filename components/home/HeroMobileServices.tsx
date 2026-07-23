@@ -16,9 +16,92 @@ import {
   Share2,
   Bookmark,
   BookmarkCheck,
+  Users,
+  Headphones,
+  Building2,
+  Mail,
+  Phone,
+  MapPin,
+  Send,
+  CheckCircle,
+  CircuitBoard,
+  Cpu,
+  Server,
+  Wifi,
+  Database,
+  Globe,
 } from "lucide-react";
 import { useEffect, useRef, useState, useCallback } from "react";
 
+// ============================================================
+// TECHNICAL BACKGROUND PATTERNS
+// ============================================================
+const technicalPatterns = [
+  {
+    id: 1,
+    icon: CircuitBoard,
+    color: "from-blue-500/10 to-cyan-500/5",
+    size: "w-64 h-64",
+    position: "top-0 left-0",
+    rotation: 0,
+  },
+  {
+    id: 2,
+    icon: Cpu,
+    color: "from-purple-500/10 to-pink-500/5",
+    size: "w-48 h-48",
+    position: "top-20 right-0",
+    rotation: 15,
+  },
+  {
+    id: 3,
+    icon: Server,
+    color: "from-emerald-500/10 to-teal-500/5",
+    size: "w-56 h-56",
+    position: "bottom-0 left-20",
+    rotation: -10,
+  },
+  {
+    id: 4,
+    icon: Wifi,
+    color: "from-yellow-500/10 to-orange-500/5",
+    size: "w-40 h-40",
+    position: "bottom-20 right-10",
+    rotation: 25,
+  },
+  {
+    id: 5,
+    icon: Database,
+    color: "from-red-500/10 to-rose-500/5",
+    size: "w-52 h-52",
+    position: "top-1/2 left-1/4",
+    rotation: -20,
+  },
+  {
+    id: 6,
+    icon: Globe,
+    color: "from-indigo-500/10 to-violet-500/5",
+    size: "w-60 h-60",
+    position: "bottom-1/3 right-1/4",
+    rotation: 30,
+  },
+];
+
+// ============================================================
+// SERVICE ICON MAP FOR BACKGROUND
+// ============================================================
+const serviceIcons = {
+  "Enterprise Networking": Network,
+  "Cyber Security": ShieldCheck,
+  "Cloud Infrastructure": Cloud,
+  "Fiber Infrastructure": Cable,
+  "CCTV & Surveillance": Camera,
+  "Electrical Engineering": Zap,
+};
+
+// ============================================================
+// SERVICES DATA
+// ============================================================
 const services = [
   {
     title: "Enterprise Networking",
@@ -29,6 +112,9 @@ const services = [
     stats: "99.9% Uptime",
     badge: "Popular",
     tag: "Network",
+    features: ["Zero-touch provisioning", "AI-driven analytics", "Multi-cloud connectivity"],
+    cta: "Schedule Network Audit",
+    bgImage: "/images/networking-bg.jpg", // Will be replaced with your images
   },
   {
     title: "Cyber Security",
@@ -39,6 +125,9 @@ const services = [
     stats: "24/7 Monitoring",
     badge: "Critical",
     tag: "Security",
+    features: ["Real-time threat detection", "Compliance monitoring", "Incident response"],
+    cta: "Get Security Assessment",
+    bgImage: "/images/security-bg.jpg",
   },
   {
     title: "Cloud Infrastructure",
@@ -49,6 +138,9 @@ const services = [
     stats: "Scalable",
     badge: "Enterprise",
     tag: "Cloud",
+    features: ["Auto-scaling", "Disaster recovery", "Cost optimization"],
+    cta: "Start Cloud Migration",
+    bgImage: "/images/cloud-bg.jpg",
   },
   {
     title: "Fiber Infrastructure",
@@ -59,6 +151,9 @@ const services = [
     stats: "10Gbps",
     badge: "New",
     tag: "Infrastructure",
+    features: ["High-speed backbone", "Last-mile connectivity", "Future-proof design"],
+    cta: "Request Fiber Survey",
+    bgImage: "/images/fiber-bg.jpg",
   },
   {
     title: "CCTV & Surveillance",
@@ -69,6 +164,9 @@ const services = [
     stats: "4K UHD",
     badge: "Smart",
     tag: "Security",
+    features: ["AI-powered analytics", "Remote monitoring", "Night vision"],
+    cta: "Get Security Quote",
+    bgImage: "/images/cctv-bg.jpg",
   },
   {
     title: "Electrical Engineering",
@@ -79,257 +177,251 @@ const services = [
     stats: "Eco-Friendly",
     badge: "Green",
     tag: "Energy",
+    features: ["Energy-efficient", "Smart grid", "Sustainable solutions"],
+    cta: "Book Consultation",
+    bgImage: "/images/electrical-bg.jpg",
   },
 ];
 
-// Service details for expanded view
-const serviceDetails = {
-  "Enterprise Networking": {
-    features: ["Zero-touch provisioning", "AI-driven analytics", "Multi-cloud connectivity"],
-    cta: "Schedule Network Audit",
-  },
-  "Cyber Security": {
-    features: ["Real-time threat detection", "Compliance monitoring", "Incident response"],
-    cta: "Get Security Assessment",
-  },
-  "Cloud Infrastructure": {
-    features: ["Auto-scaling", "Disaster recovery", "Cost optimization"],
-    cta: "Start Cloud Migration",
-  },
-  "Fiber Infrastructure": {
-    features: ["High-speed backbone", "Last-mile connectivity", "Future-proof design"],
-    cta: "Request Fiber Survey",
-  },
-  "CCTV & Surveillance": {
-    features: ["AI-powered analytics", "Remote monitoring", "Night vision"],
-    cta: "Get Security Quote",
-  },
-  "Electrical Engineering": {
-    features: ["Energy-efficient", "Smart grid", "Sustainable solutions"],
-    cta: "Book Consultation",
-  },
-};
-
 // ============================================================
-// DESKTOP NETWORK VISUALIZATION COMPONENT
+// HERO HEADER COMPONENT
 // ============================================================
-function DesktopNetworkVisualization() {
-  // Connection Line Component
-  const ConnectionLine = ({ x1, y1, x2, y2, delay = 0 }: any) => (
-    <>
-      <motion.line
-        x1={x1}
-        y1={y1}
-        x2={x2}
-        y2={y2}
-        stroke="url(#lineGradient)"
-        strokeWidth="2"
-        strokeLinecap="round"
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1.5, delay }}
-      />
-      <motion.circle
-        r="4"
-        fill="#22c55e"
-        filter="url(#packetGlow)"
-        initial={{ cx: x1, cy: y1 }}
-        animate={{ cx: [x1, x2], cy: [y1, y2] }}
-        transition={{ duration: 2.8, repeat: Infinity, ease: "linear", delay }}
-      />
-    </>
-  );
-
-  // Pulsing Node Component
-  const PulsingNode = ({ x, y, delay }: any) => (
-    <motion.div
-      className="absolute"
-      style={{ left: x, top: y }}
-      animate={{ scale: [1, 1.4, 1] }}
-      transition={{ duration: 2, repeat: Infinity, delay }}
-    >
-      <div className="h-3 w-3 rounded-full bg-primary shadow-lg shadow-primary" />
-      <motion.div
-        animate={{ scale: [1, 3], opacity: [0.6, 0] }}
-        transition={{ duration: 2, repeat: Infinity, delay }}
-        className="absolute inset-0 rounded-full bg-primary"
-      />
-    </motion.div>
-  );
-
-  // Floating Card for Desktop
-  const DesktopFloatingCard = ({ title, description, icon: Icon, className, delay = 0 }: any) => (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        x: [0, 4, -4, 0],
-        y: [0, -10, 6, 0],
-        rotate: [0, 0.5, -0.5, 0],
-      }}
-      transition={{
-        opacity: { delay, duration: 0.5 },
-        scale: { delay, duration: 0.5 },
-        x: { delay, duration: 6, repeat: Infinity, ease: "easeInOut" },
-        y: { delay, duration: 6, repeat: Infinity, ease: "easeInOut" },
-        rotate: { delay, duration: 6, repeat: Infinity, ease: "easeInOut" },
-      }}
-      whileHover={{
-        scale: 1.05,
-        y: -10,
-        rotateX: 6,
-        rotateY: -6,
-      }}
-      className={`
-        absolute group w-56 overflow-hidden rounded-3xl
-        border border-white/20 bg-white/65 backdrop-blur-3xl p-5
-        shadow-xl transition-all duration-500
-        hover:border-primary/40 hover:shadow-[0_30px_80px_rgba(37,99,235,.22)]
-        dark:border-slate-700 dark:bg-slate-900/70
-        ${className}
-      `}
-    >
-      {/* Glass reflection */}
-      <motion.div
-        animate={{ x: ["-120%", "180%"] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "linear", delay }}
-        className="absolute inset-y-0 w-24 -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-      />
-
-      <div className="relative">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 transition duration-500 group-hover:rotate-6 group-hover:scale-110">
-          <Icon className="h-6 w-6 text-primary" />
-        </div>
-        <h4 className="text-base font-bold text-slate-900 dark:text-white">
-          {title}
-        </h4>
-        <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">
-          {description}
-        </p>
-      </div>
-    </motion.div>
-  );
-
-  const nodePositions = [
-    { x: 180, y: 120 },
-    { x: 730, y: 150 },
-    { x: 760, y: 520 },
-    { x: 180, y: 560 },
-    { x: 250, y: 350 },
-    { x: 650, y: 310 },
-  ];
-
+function HeroHeader() {
   return (
-    <div className="relative hidden lg:block min-h-[600px] w-full">
-      {/* Floating Cards - Desktop Version */}
-      <DesktopFloatingCard
-        delay={0.2}
-        title="Enterprise Networking"
-        description="LAN • WAN • WiFi • SD-WAN"
-        icon={Network}
-        className="-left-10 top-8"
-      />
-      <DesktopFloatingCard
-        delay={0.4}
-        title="Cyber Security"
-        description="Firewalls • SOC • Zero Trust"
-        icon={ShieldCheck}
-        className="-right-8 top-16"
-      />
-      <DesktopFloatingCard
-        delay={0.6}
-        title="Cloud Infrastructure"
-        description="Azure • AWS • Hybrid Cloud"
-        icon={Cloud}
-        className="right-0 bottom-24"
-      />
-      <DesktopFloatingCard
-        delay={0.8}
-        title="Fiber Infrastructure"
-        description="FTTH • Backbone • Splicing"
-        icon={Cable}
-        className="-left-4 bottom-8"
-      />
-      <DesktopFloatingCard
-        delay={1.0}
-        title="CCTV & Surveillance"
-        description="IP Cameras • Monitoring"
-        icon={Camera}
-        className="left-20 top-56"
-      />
-      <DesktopFloatingCard
-        delay={1.2}
-        title="Electrical Engineering"
-        description="Solar • Power • Cabling"
-        icon={Zap}
-        className="right-20 bottom-64"
-      />
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="text-center mb-12 relative z-10"
+    >
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+        className="inline-block mb-4"
+      >
+        <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
+          Intracenet
+        </h1>
+        <p className="text-sm md:text-base uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-semibold mt-1">
+          Solutions • Connecting You Faster
+        </p>
+      </motion.div>
 
-      {/* Network SVG */}
-      <svg className="absolute inset-0 h-full w-full" viewBox="0 0 900 720">
-        <defs>
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#22c55e" />
-          </linearGradient>
-          <filter id="packetGlow">
-            <feGaussianBlur stdDeviation="4" />
-          </filter>
-        </defs>
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.6 }}
+        className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto"
+      >
+        <span className="inline-block bg-primary/10 px-4 py-1 rounded-full text-primary font-semibold text-sm mb-2">
+          Trusted Enterprise ICT Partner
+        </span>
+        <br />
+        <span className="text-2xl md:text-3xl font-semibold text-slate-800 dark:text-white">
+          Engineering Infrastructure
+        </span>
+      </motion.p>
 
-        <ConnectionLine x1={450} y1={360} x2={180} y2={120} delay={0} />
-        <ConnectionLine x1={450} y1={360} x2={730} y2={150} delay={0.4} />
-        <ConnectionLine x1={450} y1={360} x2={760} y2={520} delay={0.8} />
-        <ConnectionLine x1={450} y1={360} x2={180} y2={560} delay={1.2} />
-        <ConnectionLine x1={450} y1={360} x2={250} y2={350} delay={1.6} />
-        <ConnectionLine x1={450} y1={360} x2={650} y2={310} delay={2.0} />
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6, duration: 0.6 }}
+        className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-base"
+      >
+        Intracenet Solutions delivers enterprise fiber infrastructure and 
+        electrical engineering businesses across East Africa.
+      </motion.p>
+
+      {/* Stats Row */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.6 }}
+        className="mt-8 flex flex-wrap justify-center gap-6 md:gap-12"
+      >
+        <div className="flex items-center gap-2">
+          <div className="p-2 rounded-full bg-primary/10">
+            <Building2 className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <div className="text-xl font-bold text-slate-800 dark:text-white">250+</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Projects Delivered</div>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-2">
+          <div className="p-2 rounded-full bg-emerald-500/10">
+            <Headphones className="h-5 w-5 text-emerald-500" />
+          </div>
+          <div>
+            <div className="text-xl font-bold text-slate-800 dark:text-white">24/7</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Technical Support</div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="p-2 rounded-full bg-blue-500/10">
+            <Users className="h-5 w-5 text-blue-500" />
+          </div>
+          <div>
+            <div className="text-xl font-bold text-slate-800 dark:text-white">EA</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">East Africa Coverage</div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* CTA Buttons */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.6 }}
+        className="mt-8 flex flex-wrap justify-center gap-4"
+      >
+        <Link href="/contact">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-primary text-white rounded-full font-semibold shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2"
+          >
+            Request Consultation
+            <ArrowRight className="h-4 w-4" />
+          </motion.button>
+        </Link>
+        
+        <Link href="/services">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 border-2 border-primary/20 text-primary rounded-full font-semibold hover:bg-primary/5 transition-all"
+          >
+            Explore Services
+          </motion.button>
+        </Link>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ============================================================
+// TECHNICAL BACKGROUND ANIMATION
+// ============================================================
+function TechnicalBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Animated Grid Lines */}
+      <div className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(rgba(37, 99, 235, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(37, 99, 235, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+        }} />
+      </div>
+
+      {/* Animated Circuit Lines */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.03] dark:opacity-[0.06]">
+        <motion.path
+          d="M0 100 L200 100 L250 150 L400 150 L450 100 L600 100"
+          stroke="#2563eb"
+          strokeWidth="2"
+          fill="none"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.path
+          d="M0 200 L150 200 L200 250 L350 250 L400 200 L550 200"
+          stroke="#22c55e"
+          strokeWidth="2"
+          fill="none"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 3.5, repeat: Infinity, ease: "linear", delay: 0.5 }}
+        />
+        <motion.path
+          d="M100 400 L250 400 L300 350 L450 350 L500 400 L650 400"
+          stroke="#8b5cf6"
+          strokeWidth="2"
+          fill="none"
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
+        />
       </svg>
 
-      {/* Pulsing Nodes */}
-      {nodePositions.map((node, i) => (
-        <PulsingNode key={i} x={node.x} y={node.y} delay={i * 0.25} />
-      ))}
-
-      {/* Center Core */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-        <motion.div
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="relative flex h-32 w-32 items-center justify-center"
-        >
-          <div className="absolute inset-0 rounded-full border border-primary/20" />
-          <div className="absolute inset-4 rounded-full border border-primary/20" />
-          <div className="absolute inset-8 rounded-full border border-primary/20" />
-          
-          {/* Rotating ring */}
+      {/* Floating Technical Icons */}
+      {technicalPatterns.map((pattern, index) => {
+        const Icon = pattern.icon;
+        return (
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-            className="absolute h-32 w-32"
+            key={pattern.id}
+            className={`absolute ${pattern.position} ${pattern.size}`}
+            initial={{ opacity: 0, scale: 0.5, rotate: pattern.rotation }}
+            animate={{ 
+              opacity: [0.1, 0.2, 0.1],
+              scale: [1, 1.1, 1],
+              rotate: [pattern.rotation, pattern.rotation + 10, pattern.rotation],
+              x: [0, 10, 0],
+              y: [0, -10, 0],
+            }}
+            transition={{ 
+              duration: 8 + index * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: index * 0.5,
+            }}
           >
-            <div className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 rounded-full bg-primary" />
+            <div className={`w-full h-full bg-gradient-to-br ${pattern.color} rounded-full blur-3xl`} />
+            <Icon className="absolute inset-0 m-auto w-16 h-16 text-primary/20 dark:text-primary/30" />
           </motion.div>
-          
-          <div className="relative z-10 text-center">
-            <div className="text-2xl font-bold text-primary">Intracenet</div>
-            <div className="text-xs font-semibold text-slate-500">Solutions</div>
-          </div>
-        </motion.div>
-      </div>
+        );
+      })}
+
+      {/* Floating Particles */}
+      {[...Array(20)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-primary/20 dark:bg-primary/30 rounded-full"
+          initial={{
+            x: Math.random() * window.innerWidth,
+            y: Math.random() * window.innerHeight,
+          }}
+          animate={{
+            x: [
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerWidth,
+              Math.random() * window.innerWidth,
+            ],
+            y: [
+              Math.random() * window.innerHeight,
+              Math.random() * window.innerHeight,
+              Math.random() * window.innerHeight,
+            ],
+            opacity: [0, 0.5, 0],
+          }}
+          transition={{
+            duration: 10 + Math.random() * 20,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      ))}
     </div>
   );
 }
 
 // ============================================================
-// MAIN COMPONENT - Mobile + Desktop
+// MOBILE SERVICES CAROUSEL - WITH BACKGROUND IMAGES
 // ============================================================
-export default function HeroMobileServices() {
+function MobileServicesCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [bookmarked, setBookmarked] = useState<string[]>([]);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isAtStart, setIsAtStart] = useState(true);
   const [isAtEnd, setIsAtEnd] = useState(false);
@@ -362,7 +454,6 @@ export default function HeroMobileServices() {
     return () => container.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll to specific card
   const scrollToCard = useCallback((index: number) => {
     const container = containerRef.current;
     if (!container) return;
@@ -376,46 +467,27 @@ export default function HeroMobileServices() {
     });
   }, []);
 
-  // Handle next/prev navigation
   const handleNext = useCallback(() => {
-    const nextIndex = Math.min(activeIndex + 1, services.length - 1);
+    const nextIndex = (activeIndex + 1) % services.length;
     scrollToCard(nextIndex);
     if (navigator.vibrate) navigator.vibrate(5);
   }, [activeIndex, scrollToCard]);
 
   const handlePrev = useCallback(() => {
-    const prevIndex = Math.max(activeIndex - 1, 0);
+    const prevIndex = activeIndex === 0 ? services.length - 1 : activeIndex - 1;
     scrollToCard(prevIndex);
     if (navigator.vibrate) navigator.vibrate(5);
   }, [activeIndex, scrollToCard]);
 
-  // Handle card tap with haptic feedback
-  const handleCardTap = useCallback((index: number, title: string) => {
-    if (navigator.vibrate) navigator.vibrate(10);
-    
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'view_service_card', {
-        service: title,
-        position: index + 1,
-      });
-    }
-  }, []);
-
-  // Toggle bookmark
   const toggleBookmark = useCallback((e: React.MouseEvent, title: string) => {
     e.preventDefault();
     e.stopPropagation();
-    
     setBookmarked(prev => 
-      prev.includes(title) 
-        ? prev.filter(t => t !== title)
-        : [...prev, title]
+      prev.includes(title) ? prev.filter(t => t !== title) : [...prev, title]
     );
-    
     if (navigator.vibrate) navigator.vibrate(5);
   }, []);
 
-  // Toggle expand
   const toggleExpand = useCallback((title: string) => {
     setExpandedId(prev => prev === title ? null : title);
     if (navigator.vibrate) navigator.vibrate(10);
@@ -427,433 +499,572 @@ export default function HeroMobileServices() {
       if (e.key === 'ArrowRight') handleNext();
       if (e.key === 'ArrowLeft') handlePrev();
     };
-    
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleNext, handlePrev]);
 
-  // Auto-play
+  // AUTO SLIDE RIGHT TO LEFT - INFINITE LOOP
   useEffect(() => {
-    if (isDragging || expandedId) return;
+    if (!isAutoPlaying || isDragging || expandedId) return;
     
     const interval = setInterval(() => {
-      if (activeIndex === services.length - 1) {
-        scrollToCard(0);
-      } else {
-        handleNext();
-      }
-    }, 5000);
+      const nextIndex = (activeIndex + 1) % services.length;
+      scrollToCard(nextIndex);
+    }, 4000);
     
     return () => clearInterval(interval);
-  }, [activeIndex, handleNext, scrollToCard, isDragging, expandedId]);
+  }, [activeIndex, scrollToCard, isDragging, expandedId, isAutoPlaying]);
+
+  const handleMouseEnter = () => setIsAutoPlaying(false);
+  const handleMouseLeave = () => setIsAutoPlaying(true);
 
   return (
-    <>
-      {/* ===== DESKTOP VERSION ===== */}
-      <DesktopNetworkVisualization />
-
-      {/* ===== MOBILE VERSION ===== */}
-      <section className="lg:hidden mt-12">
-        {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ type: "spring", stiffness: 100 }}
-          className="mb-6 flex items-center justify-between"
-        >
-          <div>
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-xs uppercase tracking-[0.35em] text-primary font-semibold"
-            >
-              Our Expertise
-            </motion.p>
-
-            <motion.h3
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mt-2 text-2xl font-bold text-slate-900 dark:text-white"
-            >
-              Enterprise Solutions
-            </motion.h3>
-          </div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            className="flex items-center gap-2"
-          >
-            <span className="hidden sm:inline rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              {activeIndex + 1} / {services.length}
-            </span>
-            <motion.span
-              animate={showScrollHint ? { x: [0, 10, 0] } : { opacity: 0 }}
-              transition={{ repeat: showScrollHint ? Infinity : 0, duration: 1.5 }}
-              className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
-            >
-              Swipe →
-            </motion.span>
-          </motion.div>
-        </motion.div>
-
-        {/* Navigation Buttons */}
-        <div className="hidden sm:flex justify-between mb-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handlePrev}
-            disabled={isAtStart}
-            className={`p-2 rounded-full border border-slate-200 dark:border-slate-700 transition-all ${
-              isAtStart ? 'opacity-30 cursor-not-allowed' : 'hover:bg-primary/10'
-            }`}
-            aria-label="Previous card"
-          >
-            <ChevronLeft className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleNext}
-            disabled={isAtEnd}
-            className={`p-2 rounded-full border border-slate-200 dark:border-slate-700 transition-all ${
-              isAtEnd ? 'opacity-30 cursor-not-allowed' : 'hover:bg-primary/10'
-            }`}
-            aria-label="Next card"
-          >
-            <ChevronRight className="h-5 w-5 text-slate-600 dark:text-slate-400" />
-          </motion.button>
+    <div 
+      className="mt-12 relative"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={() => setIsAutoPlaying(false)}
+      onTouchEnd={() => setTimeout(() => setIsAutoPlaying(true), 3000)}
+    >
+      {/* Section Header */}
+      <div className="flex items-center justify-between mb-6 relative z-10">
+        <div>
+          <p className="text-xs uppercase tracking-[0.35em] text-primary font-semibold">
+            Our Expertise
+          </p>
+          <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Enterprise Solutions
+          </h3>
         </div>
+        <div className="flex items-center gap-2">
+          {isAutoPlaying && (
+            <motion.div
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 1 }}
+              className="hidden sm:flex items-center gap-1"
+            >
+              <span className="text-[8px] uppercase tracking-wider text-emerald-500 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full">
+                Auto
+              </span>
+            </motion.div>
+          )}
+          <span className="hidden sm:inline rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+            {activeIndex + 1} / {services.length}
+          </span>
+          <motion.span
+            animate={showScrollHint ? { x: [0, 10, 0] } : { opacity: 0 }}
+            transition={{ repeat: showScrollHint ? Infinity : 0, duration: 1.5 }}
+            className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary"
+          >
+            Swipe →
+          </motion.span>
+        </div>
+      </div>
 
-        {/* Cards Carousel */}
-        <div
-          ref={containerRef}
-          className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 scrollbar-hide relative -mx-4 px-4"
-          onTouchStart={() => setIsDragging(true)}
-          onTouchEnd={() => setTimeout(() => setIsDragging(false), 100)}
-          onMouseDown={() => setIsDragging(true)}
-          onMouseUp={() => setTimeout(() => setIsDragging(false), 100)}
-          role="list"
-          aria-label="Services carousel"
+      {/* Navigation Buttons */}
+      <div className="hidden sm:flex justify-between mb-4 relative z-10">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handlePrev}
+          className="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-all"
+          aria-label="Previous card"
         >
-          {/* Gradient Fade Indicators */}
-          {!isAtStart && (
-            <div className="sticky left-0 top-0 h-full w-12 bg-gradient-to-r from-white dark:from-slate-900 to-transparent pointer-events-none z-10" />
-          )}
-          {!isAtEnd && (
-            <div className="sticky right-0 top-0 h-full w-12 bg-gradient-to-l from-white dark:from-slate-900 to-transparent pointer-events-none z-10" />
-          )}
+          <ChevronLeft className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+        </motion.button>
+        
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleNext}
+          className="p-2 rounded-full border border-slate-200 dark:border-slate-700 hover:bg-primary/10 transition-all"
+          aria-label="Next card"
+        >
+          <ChevronRight className="h-5 w-5 text-slate-600 dark:text-slate-400" />
+        </motion.button>
+      </div>
 
-          {services.map((service, index) => {
-            const Icon = service.icon;
-            const isExpanded = expandedId === service.title;
-            const isBookmarked = bookmarked.includes(service.title);
-            const details = serviceDetails[service.title as keyof typeof serviceDetails];
+      {/* Carousel with Background Images */}
+      <div
+        ref={containerRef}
+        className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 scrollbar-hide relative -mx-4 px-4"
+        onTouchStart={() => {
+          setIsDragging(true);
+          setIsAutoPlaying(false);
+        }}
+        onTouchEnd={() => {
+          setTimeout(() => setIsDragging(false), 100);
+          setTimeout(() => setIsAutoPlaying(true), 3000);
+        }}
+        onMouseDown={() => {
+          setIsDragging(true);
+          setIsAutoPlaying(false);
+        }}
+        onMouseUp={() => {
+          setTimeout(() => setIsDragging(false), 100);
+          setTimeout(() => setIsAutoPlaying(true), 3000);
+        }}
+        role="list"
+        aria-label="Services carousel"
+      >
+        {!isAtStart && (
+          <div className="sticky left-0 top-0 h-full w-12 bg-gradient-to-r from-white dark:from-slate-900 to-transparent pointer-events-none z-10" />
+        )}
+        {!isAtEnd && (
+          <div className="sticky right-0 top-0 h-full w-12 bg-gradient-to-l from-white dark:from-slate-900 to-transparent pointer-events-none z-10" />
+        )}
 
-            return (
-              <motion.div
-                key={service.title}
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{
-                  delay: index * 0.08,
-                  type: "spring",
-                  stiffness: 120,
-                }}
-                whileHover={{
-                  y: -6,
-                  scale: 1.02,
-                  transition: { type: "spring", stiffness: 300 },
-                }}
-                className="min-w-[300px] max-w-[300px] snap-center flex-shrink-0 relative"
-                role="listitem"
-              >
-                <Link href={service.href} onClick={() => handleCardTap(index, service.title)}>
-                  <div className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-2xl p-6 shadow-xl transition-all duration-500 dark:border-slate-700 dark:bg-slate-900/80 hover:shadow-2xl">
-                    {/* Glow Effect */}
-                    <motion.div
-                      className={`absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-br ${service.color}`}
-                      style={{ mixBlendMode: "soft-light" }}
+        {services.map((service, index) => {
+          const Icon = service.icon;
+          const isExpanded = expandedId === service.title;
+          const isBookmarked = bookmarked.includes(service.title);
+          const ServiceIcon = serviceIcons[service.title as keyof typeof serviceIcons];
+
+          return (
+            <motion.div
+              key={service.title}
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08, type: "spring", stiffness: 120 }}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="min-w-[300px] max-w-[300px] snap-center flex-shrink-0 relative"
+              role="listitem"
+            >
+              <Link href={service.href}>
+                <div className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-2xl p-6 shadow-xl transition-all duration-500 dark:border-slate-700 dark:bg-slate-900/80 hover:shadow-2xl">
+                  
+                  {/* Background Image with Overlay */}
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                    <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/90 dark:from-slate-950/95 dark:to-slate-900/95" />
+                    {/* This will be replaced with actual images from your backend */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <ServiceIcon className="w-32 h-32 text-white/5" />
+                    </div>
+                    <div className="absolute inset-0" style={{
+                      backgroundImage: `radial-gradient(circle at 30% 40%, rgba(37,99,235,0.1) 0%, transparent 60%)`,
+                    }} />
+                  </div>
+
+                  {/* Glow Effect */}
+                  <motion.div
+                    className={`absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 bg-gradient-to-br ${service.color}`}
+                    style={{ mixBlendMode: "soft-light" }}
+                  />
+
+                  <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-primary/5 blur-3xl group-hover:scale-150 transition-transform duration-700" />
+
+                  {/* Animated Circuit Pattern in Background */}
+                  <svg className="absolute inset-0 w-full h-full opacity-[0.03] dark:opacity-[0.06] pointer-events-none">
+                    <motion.path
+                      d={`M0 ${Math.random() * 200 + 100} L${Math.random() * 100 + 50} ${Math.random() * 100 + 50} L${Math.random() * 100 + 150} ${Math.random() * 100 + 150} L${Math.random() * 100 + 250} ${Math.random() * 100 + 50}`}
+                      stroke="#2563eb"
+                      strokeWidth="1.5"
+                      fill="none"
+                      initial={{ pathLength: 0 }}
+                      animate={{ pathLength: 1 }}
+                      transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                     />
+                  </svg>
 
-                    {/* Animated Background Pattern */}
-                    <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-primary/5 blur-3xl group-hover:scale-150 transition-transform duration-700" />
+                  {/* Badge */}
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.08 + 0.2 }}
+                    className="absolute top-4 right-4 z-10"
+                  >
+                    <span className={`text-[10px] font-mono font-semibold px-2 py-1 rounded-full ${
+                      service.badge === 'Popular' ? 'bg-blue-500/20 text-blue-500' :
+                      service.badge === 'Critical' ? 'bg-red-500/20 text-red-500' :
+                      service.badge === 'Enterprise' ? 'bg-purple-500/20 text-purple-500' :
+                      service.badge === 'New' ? 'bg-green-500/20 text-green-500' :
+                      service.badge === 'Smart' ? 'bg-cyan-500/20 text-cyan-500' :
+                      'bg-yellow-500/20 text-yellow-500'
+                    }`}>
+                      {service.badge}
+                    </span>
+                  </motion.div>
 
-                    {/* Badge */}
+                  {/* Bookmark */}
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={(e) => toggleBookmark(e, service.title)}
+                    className="absolute top-4 left-4 z-10 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  >
+                    {isBookmarked ? (
+                      <BookmarkCheck className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Bookmark className="h-4 w-4 text-slate-400" />
+                    )}
+                  </motion.button>
+
+                  {/* Icon */}
+                  <motion.div
+                    whileHover={{ rotate: 8, scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 400 }}
+                    className="relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors"
+                  >
+                    <Icon className="h-8 w-8 text-primary" />
+                  </motion.div>
+
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <h4 className="text-xl font-bold text-slate-900 dark:text-white">
+                      {service.title}
+                    </h4>
+                    <p className="mt-2 leading-7 text-slate-500 dark:text-slate-400">
+                      {service.description}
+                    </p>
+
                     <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.08 + 0.2 }}
-                      className="absolute top-4 right-4 z-10"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="mt-2 flex items-center gap-2"
                     >
-                      <span className={`text-[10px] font-mono font-semibold px-2 py-1 rounded-full ${
-                        service.badge === 'Popular' ? 'bg-blue-500/20 text-blue-500' :
-                        service.badge === 'Critical' ? 'bg-red-500/20 text-red-500' :
-                        service.badge === 'Enterprise' ? 'bg-purple-500/20 text-purple-500' :
-                        service.badge === 'New' ? 'bg-green-500/20 text-green-500' :
-                        service.badge === 'Smart' ? 'bg-cyan-500/20 text-cyan-500' :
-                        'bg-yellow-500/20 text-yellow-500'
-                      }`}>
-                        {service.badge}
+                      <TrendingUp className="h-3 w-3 text-emerald-500" />
+                      <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
+                        {service.stats}
                       </span>
                     </motion.div>
 
-                    {/* Bookmark Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      onClick={(e) => toggleBookmark(e, service.title)}
-                      className="absolute top-4 left-4 z-10 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                      aria-label={isBookmarked ? "Remove bookmark" : "Add bookmark"}
-                    >
-                      {isBookmarked ? (
-                        <BookmarkCheck className="h-4 w-4 text-primary" />
-                      ) : (
-                        <Bookmark className="h-4 w-4 text-slate-400" />
-                      )}
-                    </motion.button>
-
-                    {/* Icon */}
-                    <motion.div
-                      whileHover={{
-                        rotate: 8,
-                        scale: 1.1,
-                      }}
-                      transition={{ type: "spring", stiffness: 400 }}
-                      className="relative mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors"
-                    >
-                      <Icon className="h-8 w-8 text-primary" />
-                    </motion.div>
-
-                    {/* Content */}
-                    <div className="relative">
-                      <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                        {service.title}
-                      </h4>
-
-                      <p className="mt-2 leading-7 text-slate-500 dark:text-slate-400">
-                        {service.description}
-                      </p>
-
-                      {/* Stats */}
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.3 }}
-                        className="mt-2 flex items-center gap-2"
-                      >
-                        <TrendingUp className="h-3 w-3 text-emerald-500" />
-                        <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
-                          {service.stats}
-                        </span>
-                      </motion.div>
-
-                      {/* Expandable Details */}
-                      <AnimatePresence>
-                        {isExpanded && details && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="mt-4 space-y-2 overflow-hidden"
-                          >
-                            {details.features.map((feature, i) => (
-                              <motion.div
-                                key={i}
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: i * 0.1 }}
-                                className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
-                              >
-                                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-                                <span>{feature}</span>
-                              </motion.div>
-                            ))}
-                            
-                            <motion.button
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              className="mt-2 w-full py-2 bg-primary/10 text-primary rounded-lg text-sm font-semibold hover:bg-primary/20 transition-colors"
-                            >
-                              {details.cta}
-                            </motion.button>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Footer */}
-                    <div className="mt-6 flex items-center justify-between relative">
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-semibold text-primary">
-                          Learn More
-                        </span>
-                        <span className="text-[10px] text-slate-400 font-mono">
-                          #{index + 1}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {/* Expand Button */}
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            toggleExpand(service.title);
-                          }}
-                          className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                          aria-label={isExpanded ? "Show less" : "Show more"}
-                        >
-                          <span className="text-xs text-slate-400">
-                            {isExpanded ? '−' : '+'}
-                          </span>
-                        </motion.button>
-
+                    <AnimatePresence>
+                      {isExpanded && service.features && (
                         <motion.div
-                          whileHover={{
-                            x: 4,
-                          }}
-                          transition={{ type: "spring", stiffness: 400 }}
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4 space-y-2 overflow-hidden"
                         >
-                          <ArrowRight className="h-5 w-5 text-primary" />
+                          {service.features.map((feature, i) => (
+                            <motion.div
+                              key={i}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: i * 0.1 }}
+                              className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
+                            >
+                              <CheckCircle className="h-3 w-3 text-primary" />
+                              <span>{feature}</span>
+                            </motion.div>
+                          ))}
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="mt-2 w-full py-2 bg-primary/10 text-primary rounded-lg text-sm font-semibold hover:bg-primary/20 transition-colors"
+                          >
+                            {service.cta}
+                          </motion.button>
                         </motion.div>
-                      </div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Footer */}
+                  <div className="mt-6 flex items-center justify-between relative z-10">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-semibold text-primary">
+                        Learn More
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        #{index + 1}
+                      </span>
                     </div>
 
-                    {/* Animated Top Border */}
-                    <motion.div
-                      initial={{ scaleX: 0 }}
-                      whileHover={{ scaleX: 1 }}
-                      transition={{
-                        duration: 0.35,
-                        type: "spring",
-                        stiffness: 200,
-                      }}
-                      className={`absolute left-0 top-0 h-1 w-full origin-left bg-gradient-to-r ${service.color}`}
-                    />
+                    <div className="flex items-center gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleExpand(service.title);
+                        }}
+                        className="p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                      >
+                        <span className="text-xs text-slate-400">
+                          {isExpanded ? '−' : '+'}
+                        </span>
+                      </motion.button>
 
-                    {/* Tag */}
-                    <div className="absolute bottom-4 right-4">
-                      <span className="text-[8px] font-mono uppercase text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
-                        {service.tag}
-                      </span>
+                      <motion.div whileHover={{ x: 4 }}>
+                        <ArrowRight className="h-5 w-5 text-primary" />
+                      </motion.div>
                     </div>
                   </div>
-                </Link>
-              </motion.div>
-            );
-          })}
+
+                  {/* Animated Top Border */}
+                  <motion.div
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.35, type: "spring", stiffness: 200 }}
+                    className={`absolute left-0 top-0 h-1 w-full origin-left bg-gradient-to-r ${service.color}`}
+                  />
+
+                  <div className="absolute bottom-4 right-4 z-10">
+                    <span className="text-[8px] font-mono uppercase text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
+                      {service.tag}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Controls */}
+      <div className="mt-6 space-y-4 relative z-10">
+        <div className="h-1 w-full max-w-xs mx-auto bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden relative">
+          <motion.div 
+            className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
+            style={{ width: `${scrollProgress}%` }}
+            transition={{ type: "spring", damping: 30 }}
+          />
+          <motion.div
+            className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full shadow-lg"
+            style={{ left: `calc(${scrollProgress}% - 6px)` }}
+            animate={{ scale: [1, 1.3, 1] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          />
         </div>
 
-        {/* Footer Controls */}
-        <div className="mt-6 space-y-4">
-          {/* Progress Bar */}
-          <div className="h-1 w-full max-w-xs mx-auto bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden relative">
-            <motion.div 
-              className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
-              style={{ width: `${scrollProgress}%` }}
-              transition={{ type: "spring", damping: 30 }}
-            />
-            <motion.div
-              className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full shadow-lg"
-              style={{ left: `calc(${scrollProgress}% - 6px)` }}
-              animate={{ scale: [1, 1.3, 1] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-            />
+        <div className="flex items-center justify-center gap-4">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => {
+              if (navigator.share) {
+                navigator.share({
+                  title: 'Intracenet Enterprise Solutions',
+                  text: 'Check out our enterprise solutions!',
+                  url: window.location.href,
+                });
+              }
+            }}
+            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          >
+            <Share2 className="h-4 w-4 text-slate-400" />
+          </motion.button>
+
+          <div className="flex gap-2">
+            {services.map((_, i) => (
+              <motion.button
+                key={i}
+                onClick={() => {
+                  scrollToCard(i);
+                  if (navigator.vibrate) navigator.vibrate(5);
+                }}
+                className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
+                  i === activeIndex 
+                    ? 'bg-primary shadow-lg shadow-primary/30' 
+                    : 'bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500'
+                }`}
+                animate={i === activeIndex ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                transition={{ repeat: i === activeIndex ? Infinity : 0, duration: 2 }}
+              />
+            ))}
           </div>
 
-          {/* Navigation Dots + Counter + Share */}
-          <div className="flex items-center justify-center gap-4">
-            {/* Share Button */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: 'Intracenet Enterprise Solutions',
-                    text: 'Check out our enterprise solutions!',
-                    url: window.location.href,
-                  });
-                }
-              }}
-              className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-              aria-label="Share services"
-            >
-              <Share2 className="h-4 w-4 text-slate-400" />
-            </motion.button>
+          <span className="text-xs font-mono text-slate-400 min-w-[30px] text-center">
+            {activeIndex + 1}/{services.length}
+          </span>
 
-            {/* Dots */}
-            <div className="flex gap-2">
-              {services.map((_, i) => (
-                <motion.button
-                  key={i}
-                  onClick={() => {
-                    scrollToCard(i);
-                    if (navigator.vibrate) navigator.vibrate(5);
-                  }}
-                  className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
-                    i === activeIndex 
-                      ? 'bg-primary shadow-lg shadow-primary/30' 
-                      : 'bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500'
-                  }`}
-                  animate={i === activeIndex ? { scale: [1, 1.3, 1] } : { scale: 1 }}
-                  transition={{ repeat: i === activeIndex ? Infinity : 0, duration: 2 }}
-                  aria-label={`Go to card ${i + 1}`}
-                  aria-current={i === activeIndex ? 'true' : 'false'}
-                />
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={() => setIsAutoPlaying(!isAutoPlaying)}
+            className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            aria-label={isAutoPlaying ? "Pause auto-play" : "Resume auto-play"}
+          >
+            {isAutoPlaying ? (
+              <span className="text-xs text-slate-400">⏸</span>
+            ) : (
+              <span className="text-xs text-slate-400">▶</span>
+            )}
+          </motion.button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// CONTACT SECTION
+// ============================================================
+function ContactSection() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      className="mt-20 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-3xl p-8 md:p-12 border border-slate-200 dark:border-slate-700 relative overflow-hidden"
+    >
+      {/* Background pattern for contact section */}
+      <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            radial-gradient(circle at 20% 50%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, rgba(34, 197, 94, 0.1) 0%, transparent 50%)
+          `,
+        }} />
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-8 relative z-10">
+        {/* Left Side - Text */}
+        <div>
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white"
+          >
+            Let's Build Your Next ICT Solution
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-4 text-slate-600 dark:text-slate-400 leading-relaxed"
+          >
+            Whether you're planning a network upgrade, cloud migration, 
+            cybersecurity deployment or fiber infrastructure project, 
+            we'd love to hear from you.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="mt-6 space-y-3"
+          >
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-full bg-primary/10">
+                <Mail className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm text-slate-600 dark:text-slate-300">info@intracenet.com</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-full bg-primary/10">
+                <Phone className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm text-slate-600 dark:text-slate-300">+254 700 123 456</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-full bg-primary/10">
+                <MapPin className="h-4 w-4 text-primary" />
+              </div>
+              <span className="text-sm text-slate-600 dark:text-slate-300">Nairobi, Kenya</span>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="mt-6 flex gap-4"
+          >
+            <div className="flex -space-x-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-8 w-8 rounded-full bg-slate-300 dark:bg-slate-600 border-2 border-white dark:border-slate-800 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300">
+                  {String.fromCharCode(64 + i)}
+                </div>
               ))}
             </div>
-
-            {/* Counter */}
-            <span className="text-xs font-mono text-slate-400 min-w-[30px] text-center">
-              {activeIndex + 1}/{services.length}
+            <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center">
+              Trusted by 250+ businesses
             </span>
-          </div>
-
-          {/* Scroll Hint */}
-          <AnimatePresence>
-            {showScrollHint && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="flex justify-center"
-              >
-                <div className="flex items-center gap-2 text-xs text-slate-400">
-                  <motion.div
-                    animate={{ x: [0, 10, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                  >
-                    <ArrowRight className="h-3 w-3" />
-                  </motion.div>
-                  <span>Swipe to explore</span>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Accessibility */}
-          <div className="sr-only" aria-live="polite">
-            Currently viewing card {activeIndex + 1} of {services.length}: {services[activeIndex].title}
-          </div>
+          </motion.div>
         </div>
 
-        {/* Keyboard Navigation Hint */}
-        <div className="hidden sm:block mt-2 text-center">
-          <span className="text-xs text-slate-400">
-            Use ← → arrow keys to navigate
-          </span>
-        </div>
-      </section>
-    </>
+        {/* Right Side - Form */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-lg"
+        >
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+            Send us a Message
+          </h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+            Fill in the form below and one of our consultants will contact you within 24 hours.
+          </p>
+          
+          <form className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                First Name
+              </label>
+              <input
+                type="text"
+                placeholder="Enter your first name"
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                Email Address
+              </label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                Message
+              </label>
+              <textarea
+                placeholder="Tell us about your project..."
+                rows={3}
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm resize-none"
+              />
+            </div>
+            
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              type="submit"
+              className="w-full py-3 bg-primary text-white rounded-lg font-semibold shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center justify-center gap-2"
+            >
+              Send Message
+              <Send className="h-4 w-4" />
+            </motion.button>
+          </form>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ============================================================
+// MAIN COMPONENT
+// ============================================================
+export default function HeroMobileServices() {
+  return (
+    <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+      {/* Technical Background */}
+      <TechnicalBackground />
+      
+      <div className="relative mx-auto max-w-7xl px-4 py-12 md:py-20">
+        {/* Hero Header */}
+        <HeroHeader />
+
+        {/* Mobile Services Carousel with Auto Slide */}
+        <MobileServicesCarousel />
+
+        {/* Contact Section */}
+        <ContactSection />
+      </div>
+    </section>
   );
 }
