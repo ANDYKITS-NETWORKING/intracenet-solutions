@@ -34,6 +34,122 @@ import {
 import { useEffect, useRef, useState, useCallback } from "react";
 
 // ============================================================
+// UTILITY FUNCTIONS FOR SAFE CLIENT-SIDE ACCESS
+// ============================================================
+const isClient = typeof window !== 'undefined';
+
+const safeVibrate = (duration: number) => {
+  if (isClient && navigator.vibrate) {
+    navigator.vibrate(duration);
+  }
+};
+
+const safeGtag = (event: string, data: any) => {
+  if (isClient && (window as any).gtag) {
+    (window as any).gtag(event, data);
+  }
+};
+
+const safeShare = async (data: { title: string; text: string; url: string }) => {
+  if (isClient && navigator.share) {
+    try {
+      await navigator.share(data);
+    } catch (error) {
+      // User cancelled or error occurred
+      console.log('Share cancelled');
+    }
+  }
+};
+
+// ============================================================
+// SERVICES DATA - ALL 6 SERVICES
+// ============================================================
+const services = [
+  {
+    title: "Enterprise Networking",
+    description: "LAN • WAN • WiFi • SD-WAN",
+    icon: Network,
+    href: "/services/networking",
+    color: "from-blue-600 to-sky-500",
+    stats: "99.9% Uptime",
+    badge: "Popular",
+    tag: "Network",
+    features: ["Zero-touch provisioning", "AI-driven analytics", "Multi-cloud connectivity"],
+    cta: "Schedule Network Audit",
+  },
+  {
+    title: "Cyber Security",
+    description: "Firewalls • SOC • Zero Trust",
+    icon: ShieldCheck,
+    href: "/services/security",
+    color: "from-emerald-600 to-green-500",
+    stats: "24/7 Monitoring",
+    badge: "Critical",
+    tag: "Security",
+    features: ["Real-time threat detection", "Compliance monitoring", "Incident response"],
+    cta: "Get Security Assessment",
+  },
+  {
+    title: "Cloud Infrastructure",
+    description: "Azure • AWS • Hybrid Cloud",
+    icon: Cloud,
+    href: "/services/cloud",
+    color: "from-cyan-600 to-blue-500",
+    stats: "Scalable",
+    badge: "Enterprise",
+    tag: "Cloud",
+    features: ["Auto-scaling", "Disaster recovery", "Cost optimization"],
+    cta: "Start Cloud Migration",
+  },
+  {
+    title: "Fiber Infrastructure",
+    description: "FTTH • Backbone • Splicing",
+    icon: Cable,
+    href: "/services/fiber",
+    color: "from-indigo-600 to-blue-500",
+    stats: "10Gbps",
+    badge: "New",
+    tag: "Infrastructure",
+    features: ["High-speed backbone", "Last-mile connectivity", "Future-proof design"],
+    cta: "Request Fiber Survey",
+  },
+  {
+    title: "CCTV & Surveillance",
+    description: "IP Cameras • Monitoring",
+    icon: Camera,
+    href: "/services/cctv",
+    color: "from-blue-600 to-emerald-500",
+    stats: "4K UHD",
+    badge: "Smart",
+    tag: "Security",
+    features: ["AI-powered analytics", "Remote monitoring", "Night vision"],
+    cta: "Get Security Quote",
+  },
+  {
+    title: "Electrical Engineering",
+    description: "Solar • Power • Cabling",
+    icon: Zap,
+    href: "/services/electrical",
+    color: "from-yellow-500 to-green-500",
+    stats: "Eco-Friendly",
+    badge: "Green",
+    tag: "Energy",
+    features: ["Energy-efficient", "Smart grid", "Sustainable solutions"],
+    cta: "Book Consultation",
+  },
+];
+
+// Service icon map for backgrounds
+const serviceIcons = {
+  "Enterprise Networking": Network,
+  "Cyber Security": ShieldCheck,
+  "Cloud Infrastructure": Cloud,
+  "Fiber Infrastructure": Cable,
+  "CCTV & Surveillance": Camera,
+  "Electrical Engineering": Zap,
+};
+
+// ============================================================
 // TECHNICAL BACKGROUND PATTERNS
 // ============================================================
 const technicalPatterns = [
@@ -84,102 +200,6 @@ const technicalPatterns = [
     size: "w-60 h-60",
     position: "bottom-1/3 right-1/4",
     rotation: 30,
-  },
-];
-
-// ============================================================
-// SERVICE ICON MAP FOR BACKGROUND
-// ============================================================
-const serviceIcons = {
-  "Enterprise Networking": Network,
-  "Cyber Security": ShieldCheck,
-  "Cloud Infrastructure": Cloud,
-  "Fiber Infrastructure": Cable,
-  "CCTV & Surveillance": Camera,
-  "Electrical Engineering": Zap,
-};
-
-// ============================================================
-// SERVICES DATA
-// ============================================================
-const services = [
-  {
-    title: "Enterprise Networking",
-    description: "LAN • WAN • WiFi • SD-WAN",
-    icon: Network,
-    href: "/services/networking",
-    color: "from-blue-600 to-sky-500",
-    stats: "99.9% Uptime",
-    badge: "Popular",
-    tag: "Network",
-    features: ["Zero-touch provisioning", "AI-driven analytics", "Multi-cloud connectivity"],
-    cta: "Schedule Network Audit",
-    bgImage: "/images/networking-bg.jpg", // Will be replaced with your images
-  },
-  {
-    title: "Cyber Security",
-    description: "Firewalls • SOC • Zero Trust",
-    icon: ShieldCheck,
-    href: "/services/security",
-    color: "from-emerald-600 to-green-500",
-    stats: "24/7 Monitoring",
-    badge: "Critical",
-    tag: "Security",
-    features: ["Real-time threat detection", "Compliance monitoring", "Incident response"],
-    cta: "Get Security Assessment",
-    bgImage: "/images/security-bg.jpg",
-  },
-  {
-    title: "Cloud Infrastructure",
-    description: "Azure • AWS • Hybrid Cloud",
-    icon: Cloud,
-    href: "/services/cloud",
-    color: "from-cyan-600 to-blue-500",
-    stats: "Scalable",
-    badge: "Enterprise",
-    tag: "Cloud",
-    features: ["Auto-scaling", "Disaster recovery", "Cost optimization"],
-    cta: "Start Cloud Migration",
-    bgImage: "/images/cloud-bg.jpg",
-  },
-  {
-    title: "Fiber Infrastructure",
-    description: "FTTH • Backbone • Splicing",
-    icon: Cable,
-    href: "/services/fiber",
-    color: "from-indigo-600 to-blue-500",
-    stats: "10Gbps",
-    badge: "New",
-    tag: "Infrastructure",
-    features: ["High-speed backbone", "Last-mile connectivity", "Future-proof design"],
-    cta: "Request Fiber Survey",
-    bgImage: "/images/fiber-bg.jpg",
-  },
-  {
-    title: "CCTV & Surveillance",
-    description: "IP Cameras • Monitoring",
-    icon: Camera,
-    href: "/services/cctv",
-    color: "from-blue-600 to-emerald-500",
-    stats: "4K UHD",
-    badge: "Smart",
-    tag: "Security",
-    features: ["AI-powered analytics", "Remote monitoring", "Night vision"],
-    cta: "Get Security Quote",
-    bgImage: "/images/cctv-bg.jpg",
-  },
-  {
-    title: "Electrical Engineering",
-    description: "Solar • Power • Cabling",
-    icon: Zap,
-    href: "/services/electrical",
-    color: "from-yellow-500 to-green-500",
-    stats: "Eco-Friendly",
-    badge: "Green",
-    tag: "Energy",
-    features: ["Energy-efficient", "Smart grid", "Sustainable solutions"],
-    cta: "Book Consultation",
-    bgImage: "/images/electrical-bg.jpg",
   },
 ];
 
@@ -304,9 +324,27 @@ function HeroHeader() {
 }
 
 // ============================================================
-// TECHNICAL BACKGROUND ANIMATION
+// TECHNICAL BACKGROUND ANIMATION - FIXED
 // ============================================================
 function TechnicalBackground() {
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
+
+  useEffect(() => {
+    if (isClient) {
+      setWindowWidth(window.innerWidth);
+      setWindowHeight(window.innerHeight);
+      
+      const handleResize = () => {
+        setWindowWidth(window.innerWidth);
+        setWindowHeight(window.innerHeight);
+      };
+      
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []);
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Animated Grid Lines */}
@@ -379,25 +417,25 @@ function TechnicalBackground() {
         );
       })}
 
-      {/* Floating Particles */}
-      {[...Array(20)].map((_, i) => (
+      {/* Floating Particles - Only render on client */}
+      {isClient && windowWidth > 0 && [...Array(20)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 bg-primary/20 dark:bg-primary/30 rounded-full"
           initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
+            x: Math.random() * windowWidth,
+            y: Math.random() * windowHeight,
           }}
           animate={{
             x: [
-              Math.random() * window.innerWidth,
-              Math.random() * window.innerWidth,
-              Math.random() * window.innerWidth,
+              Math.random() * windowWidth,
+              Math.random() * windowWidth,
+              Math.random() * windowWidth,
             ],
             y: [
-              Math.random() * window.innerHeight,
-              Math.random() * window.innerHeight,
-              Math.random() * window.innerHeight,
+              Math.random() * windowHeight,
+              Math.random() * windowHeight,
+              Math.random() * windowHeight,
             ],
             opacity: [0, 0.5, 0],
           }}
@@ -413,7 +451,7 @@ function TechnicalBackground() {
 }
 
 // ============================================================
-// MOBILE SERVICES CAROUSEL - WITH BACKGROUND IMAGES
+// MOBILE SERVICES CAROUSEL - FIXED
 // ============================================================
 function MobileServicesCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -470,14 +508,22 @@ function MobileServicesCarousel() {
   const handleNext = useCallback(() => {
     const nextIndex = (activeIndex + 1) % services.length;
     scrollToCard(nextIndex);
-    if (navigator.vibrate) navigator.vibrate(5);
+    safeVibrate(5);
   }, [activeIndex, scrollToCard]);
 
   const handlePrev = useCallback(() => {
     const prevIndex = activeIndex === 0 ? services.length - 1 : activeIndex - 1;
     scrollToCard(prevIndex);
-    if (navigator.vibrate) navigator.vibrate(5);
+    safeVibrate(5);
   }, [activeIndex, scrollToCard]);
+
+  const handleCardTap = useCallback((index: number, title: string) => {
+    safeVibrate(10);
+    safeGtag('event', 'view_service_card', {
+      service: title,
+      position: index + 1,
+    });
+  }, []);
 
   const toggleBookmark = useCallback((e: React.MouseEvent, title: string) => {
     e.preventDefault();
@@ -485,12 +531,12 @@ function MobileServicesCarousel() {
     setBookmarked(prev => 
       prev.includes(title) ? prev.filter(t => t !== title) : [...prev, title]
     );
-    if (navigator.vibrate) navigator.vibrate(5);
+    safeVibrate(5);
   }, []);
 
   const toggleExpand = useCallback((title: string) => {
     setExpandedId(prev => prev === title ? null : title);
-    if (navigator.vibrate) navigator.vibrate(10);
+    safeVibrate(10);
   }, []);
 
   // Keyboard navigation
@@ -517,6 +563,14 @@ function MobileServicesCarousel() {
 
   const handleMouseEnter = () => setIsAutoPlaying(false);
   const handleMouseLeave = () => setIsAutoPlaying(true);
+
+  const handleShare = () => {
+    safeShare({
+      title: 'Intracenet Enterprise Solutions',
+      text: 'Check out our enterprise solutions!',
+      url: isClient ? window.location.href : '',
+    });
+  };
 
   return (
     <div 
@@ -584,7 +638,7 @@ function MobileServicesCarousel() {
         </motion.button>
       </div>
 
-      {/* Carousel with Background Images */}
+      {/* Carousel */}
       <div
         ref={containerRef}
         className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-6 scrollbar-hide relative -mx-4 px-4"
@@ -631,15 +685,14 @@ function MobileServicesCarousel() {
               className="min-w-[300px] max-w-[300px] snap-center flex-shrink-0 relative"
               role="listitem"
             >
-              <Link href={service.href}>
+              <Link href={service.href} onClick={() => handleCardTap(index, service.title)}>
                 <div className="group relative overflow-hidden rounded-3xl border border-slate-200 bg-white/80 backdrop-blur-2xl p-6 shadow-xl transition-all duration-500 dark:border-slate-700 dark:bg-slate-900/80 hover:shadow-2xl">
                   
                   {/* Background Image with Overlay */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
                     <div className="absolute inset-0 bg-gradient-to-br from-slate-900/90 to-slate-800/90 dark:from-slate-950/95 dark:to-slate-900/95" />
-                    {/* This will be replaced with actual images from your backend */}
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <ServiceIcon className="w-32 h-32 text-white/5" />
+                      {ServiceIcon && <ServiceIcon className="w-32 h-32 text-white/5" />}
                     </div>
                     <div className="absolute inset-0" style={{
                       backgroundImage: `radial-gradient(circle at 30% 40%, rgba(37,99,235,0.1) 0%, transparent 60%)`,
@@ -836,15 +889,7 @@ function MobileServicesCarousel() {
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            onClick={() => {
-              if (navigator.share) {
-                navigator.share({
-                  title: 'Intracenet Enterprise Solutions',
-                  text: 'Check out our enterprise solutions!',
-                  url: window.location.href,
-                });
-              }
-            }}
+            onClick={handleShare}
             className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           >
             <Share2 className="h-4 w-4 text-slate-400" />
@@ -856,7 +901,7 @@ function MobileServicesCarousel() {
                 key={i}
                 onClick={() => {
                   scrollToCard(i);
-                  if (navigator.vibrate) navigator.vibrate(5);
+                  safeVibrate(5);
                 }}
                 className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
                   i === activeIndex 
@@ -896,6 +941,12 @@ function MobileServicesCarousel() {
 // CONTACT SECTION
 // ============================================================
 function ContactSection() {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Form submission logic here
+    console.log('Form submitted');
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -996,7 +1047,7 @@ function ContactSection() {
             Fill in the form below and one of our consultants will contact you within 24 hours.
           </p>
           
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
                 First Name
