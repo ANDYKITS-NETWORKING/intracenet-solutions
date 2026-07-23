@@ -314,8 +314,7 @@ function TrustBadges() {
 }
 // ============================================================
 // ============================================================
-// ============================================================
-// HERO HEADER COMPONENT - FINAL FIX
+// HERO HEADER COMPONENT - ULTIMATE FIX
 // ============================================================
 function HeroHeader() {
   return (
@@ -323,16 +322,16 @@ function HeroHeader() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="text-center relative z-10 pt-8 pb-12 md:pt-20 md:pb-24"
+      className="text-center relative z-10 pt-6 pb-12 md:pt-20 md:pb-24"
     >
       {/* Small Logo */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        className="inline-block mb-3"
+        className="inline-block mb-2"
       >
-        <h1 className="text-xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
+        <h1 className="text-lg sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
           Intracenet
         </h1>
         <p className="text-[8px] sm:text-[10px] md:text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-semibold mt-0.5">
@@ -350,48 +349,24 @@ function HeroHeader() {
         Trusted Enterprise ICT Partner
       </motion.div>
 
-      {/* ✅ FINAL FIX: Even smaller text with better line breaks */}
-      <div className="space-y-0.5 max-w-[200px] sm:max-w-sm mx-auto px-2">
+      {/* ✅ ULTIMATE FIX: Single line with smaller text */}
+      <div className="max-w-[260px] sm:max-w-sm mx-auto px-3">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="text-base sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
+          className="text-xl sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
         >
-          Engineering
-        </motion.h2>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.6 }}
-          className="text-base sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight"
-        >
-          Reliable
-        </motion.h2>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="text-base sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight"
-        >
-          Digital
-        </motion.h2>
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.45, duration: 0.6 }}
-          className="text-base sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
-        >
-          Infrastructure
+          Reliable Digital Infrastructure
         </motion.h2>
       </div>
 
-      {/* Description - Also smaller */}
+      {/* Description */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="mt-3 text-slate-600 dark:text-slate-400 text-[10px] sm:text-sm md:text-lg leading-relaxed max-w-[200px] sm:max-w-sm mx-auto px-4"
+        className="mt-3 text-slate-600 dark:text-slate-400 text-xs sm:text-sm md:text-lg leading-relaxed max-w-[260px] sm:max-w-sm mx-auto px-4"
       >
         Intracenet Solutions delivers enterprise networking, cybersecurity, cloud, fiber infrastructure and electrical engineering solutions that empower businesses across East Africa.
       </motion.p>
