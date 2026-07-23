@@ -314,7 +314,8 @@ function TrustBadges() {
 }
 // ============================================================
 // ============================================================
-// HERO HEADER COMPONENT
+// ============================================================
+// HERO HEADER COMPONENT - FINAL FIX
 // ============================================================
 function HeroHeader() {
   return (
@@ -322,20 +323,19 @@ function HeroHeader() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="relative z-10 pt-10 pb-16 md:pt-20 md:pb-24 text-center"
+      className="text-center relative z-10 pt-8 pb-12 md:pt-20 md:pb-24"
     >
-      {/* Logo */}
+      {/* Small Logo */}
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-        className="inline-block mb-5"
+        className="inline-block mb-3"
       >
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
+        <h1 className="text-xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
           Intracenet
         </h1>
-
-        <p className="mt-1 text-[10px] sm:text-xs uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400 font-semibold">
+        <p className="text-[8px] sm:text-[10px] md:text-xs uppercase tracking-[0.3em] text-slate-500 dark:text-slate-400 font-semibold mt-0.5">
           Solutions • Connecting You Faster
         </p>
       </motion.div>
@@ -345,62 +345,55 @@ function HeroHeader() {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="inline-flex items-center rounded-full bg-primary/10 px-4 py-2 text-xs font-semibold text-primary mb-8"
+        className="inline-block bg-primary/10 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-primary font-semibold text-[10px] sm:text-xs mb-3"
       >
         Trusted Enterprise ICT Partner
       </motion.div>
 
-      {/* Hero Heading */}
-      <motion.h2
-        initial={{ opacity: 0, y: 25 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35, duration: 0.7 }}
-        className="
-          mx-auto
-          max-w-5xl
-          px-4
-          font-black
-          tracking-tight
-          leading-[0.95]
-          text-[clamp(2.2rem,8vw,5.4rem)]
-          text-balance
-        "
-      >
-        <span className="block text-slate-900 dark:text-white">
+      {/* ✅ FINAL FIX: Even smaller text with better line breaks */}
+      <div className="space-y-0.5 max-w-[200px] sm:max-w-sm mx-auto px-2">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="text-base sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
+        >
           Engineering
-        </span>
-
-        <span className="block bg-gradient-to-r from-primary via-blue-500 to-emerald-500 bg-clip-text text-transparent">
-          Reliable Digital
-        </span>
-
-        <span className="block text-slate-900 dark:text-white">
+        </motion.h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.6 }}
+          className="text-base sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight"
+        >
+          Reliable
+        </motion.h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="text-base sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-emerald-500 bg-clip-text text-transparent leading-tight"
+        >
+          Digital
+        </motion.h2>
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45, duration: 0.6 }}
+          className="text-base sm:text-4xl md:text-5xl font-bold text-slate-900 dark:text-white leading-tight"
+        >
           Infrastructure
-        </span>
-      </motion.h2>
+        </motion.h2>
+      </div>
 
-      {/* Description */}
+      {/* Description - Also smaller */}
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.55 }}
-        className="
-          mx-auto
-          mt-8
-          max-w-2xl
-          px-6
-          text-sm
-          leading-7
-          text-slate-600
-          dark:text-slate-400
-          sm:text-base
-          md:text-lg
-        "
+        transition={{ delay: 0.6 }}
+        className="mt-3 text-slate-600 dark:text-slate-400 text-[10px] sm:text-sm md:text-lg leading-relaxed max-w-[200px] sm:max-w-sm mx-auto px-4"
       >
-        Intracenet Solutions delivers enterprise networking,
-        cybersecurity, cloud infrastructure, fiber optic solutions and
-        electrical engineering services that empower businesses across
-        East Africa.
+        Intracenet Solutions delivers enterprise networking, cybersecurity, cloud, fiber infrastructure and electrical engineering solutions that empower businesses across East Africa.
       </motion.p>
 
       {/* Trust Badges */}
@@ -411,24 +404,24 @@ function HeroHeader() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
-        className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center"
+        className="mt-6 flex flex-col items-center gap-3"
       >
         <Link href="/contact">
           <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="flex items-center gap-2 rounded-full bg-primary px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition-all hover:shadow-xl"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 sm:px-8 py-2.5 sm:py-3 bg-primary text-white rounded-full font-semibold shadow-lg shadow-primary/30 hover:shadow-xl transition-all flex items-center gap-2 text-xs sm:text-sm"
           >
             Request Consultation
             <ArrowRight className="h-4 w-4" />
           </motion.button>
         </Link>
-
+        
         <Link href="/services">
           <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            className="text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="text-xs sm:text-sm text-primary hover:text-primary/80 font-semibold transition-colors"
           >
             Explore Services →
           </motion.button>
@@ -438,42 +431,26 @@ function HeroHeader() {
       {/* Quick Actions */}
       <QuickActions />
 
-      {/* Stats */}
+      {/* Stats Row */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.9 }}
-        className="mt-10 flex justify-center gap-8 sm:gap-12"
+        className="mt-8 flex flex-wrap justify-center gap-4 sm:gap-6 text-center"
       >
-        <div className="text-center">
-          <div className="text-xl font-bold text-slate-900 dark:text-white">
-            250+
-          </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">
-            Projects
-          </div>
+        <div>
+          <div className="text-base sm:text-lg font-bold text-slate-800 dark:text-white">250+</div>
+          <div className="text-[8px] sm:text-[10px] text-slate-500 dark:text-slate-400">Projects</div>
         </div>
-
-        <div className="h-10 w-px bg-slate-300 dark:bg-slate-700" />
-
-        <div className="text-center">
-          <div className="text-xl font-bold text-slate-900 dark:text-white">
-            24/7
-          </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">
-            Support
-          </div>
+        <div className="w-px bg-slate-200 dark:bg-slate-700" />
+        <div>
+          <div className="text-base sm:text-lg font-bold text-slate-800 dark:text-white">24/7</div>
+          <div className="text-[8px] sm:text-[10px] text-slate-500 dark:text-slate-400">Support</div>
         </div>
-
-        <div className="h-10 w-px bg-slate-300 dark:bg-slate-700" />
-
-        <div className="text-center">
-          <div className="text-xl font-bold text-slate-900 dark:text-white">
-            EA
-          </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">
-            Coverage
-          </div>
+        <div className="w-px bg-slate-200 dark:bg-slate-700" />
+        <div>
+          <div className="text-base sm:text-lg font-bold text-slate-800 dark:text-white">EA</div>
+          <div className="text-[8px] sm:text-[10px] text-slate-500 dark:text-slate-400">Coverage</div>
         </div>
       </motion.div>
     </motion.div>
