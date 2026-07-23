@@ -55,7 +55,6 @@ const safeShare = async (data: { title: string; text: string; url: string }) => 
     try {
       await navigator.share(data);
     } catch (error) {
-      // User cancelled or error occurred
       console.log('Share cancelled');
     }
   }
@@ -204,6 +203,19 @@ const technicalPatterns = [
 ];
 
 // ============================================================
+// FIXED CIRCUIT PATH - No Math.random() during render
+// ============================================================
+// Pre-define circuit paths to avoid hydration mismatch
+const circuitPaths = [
+  "M0 200 L150 150 L200 250 L350 200 L400 300 L550 250",
+  "M0 150 L100 200 L180 120 L280 180 L350 100 L500 150",
+  "M0 250 L120 180 L200 280 L320 220 L400 320 L550 280",
+  "M0 180 L80 120 L160 200 L240 140 L340 220 L480 160",
+  "M0 220 L140 160 L220 240 L300 180 L420 260 L560 200",
+  "M0 280 L90 220 L170 300 L250 240 L370 320 L510 260",
+];
+
+// ============================================================
 // HERO HEADER COMPONENT
 // ============================================================
 function HeroHeader() {
@@ -249,8 +261,9 @@ function HeroHeader() {
         transition={{ delay: 0.6, duration: 0.6 }}
         className="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-base"
       >
-        Intracenet Solutions delivers enterprise fiber infrastructure and 
-        electrical engineering businesses across East Africa.
+        Intracenet Solutions delivers enterprise networking, cybersecurity, cloud, 
+        fiber infrastructure and electrical engineering solutions that empower 
+        businesses across East Africa.
       </motion.p>
 
       {/* Stats Row */}
@@ -285,8 +298,8 @@ function HeroHeader() {
             <Users className="h-5 w-5 text-blue-500" />
           </div>
           <div>
-            <div className="text-xl font-bold text-slate-800 dark:text-white">EA</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">East Africa Coverage</div>
+            <div className="text-xl font-bold text-slate-800 dark:text-white">99.99%</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">Network Availability</div>
           </div>
         </div>
       </motion.div>
@@ -451,7 +464,7 @@ function TechnicalBackground() {
 }
 
 // ============================================================
-// MOBILE SERVICES CAROUSEL - FIXED
+// MOBILE SERVICES CAROUSEL - FIXED HYDRATION
 // ============================================================
 function MobileServicesCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -673,6 +686,8 @@ function MobileServicesCarousel() {
           const isExpanded = expandedId === service.title;
           const isBookmarked = bookmarked.includes(service.title);
           const ServiceIcon = serviceIcons[service.title as keyof typeof serviceIcons];
+          // Use pre-defined path, fallback to a default if index out of range
+          const circuitPath = circuitPaths[index % circuitPaths.length];
 
           return (
             <motion.div
@@ -707,10 +722,10 @@ function MobileServicesCarousel() {
 
                   <div className="absolute -top-24 -right-24 w-48 h-48 rounded-full bg-primary/5 blur-3xl group-hover:scale-150 transition-transform duration-700" />
 
-                  {/* Animated Circuit Pattern in Background */}
+                  {/* Animated Circuit Pattern in Background - FIXED: No Math.random() */}
                   <svg className="absolute inset-0 w-full h-full opacity-[0.03] dark:opacity-[0.06] pointer-events-none">
                     <motion.path
-                      d={`M0 ${Math.random() * 200 + 100} L${Math.random() * 100 + 50} ${Math.random() * 100 + 50} L${Math.random() * 100 + 150} ${Math.random() * 100 + 150} L${Math.random() * 100 + 250} ${Math.random() * 100 + 50}`}
+                      d={circuitPath}
                       stroke="#2563eb"
                       strokeWidth="1.5"
                       fill="none"
@@ -943,7 +958,6 @@ function MobileServicesCarousel() {
 function ContactSection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic here
     console.log('Form submitted');
   };
 
@@ -998,13 +1012,13 @@ function ContactSection() {
               <div className="p-2 rounded-full bg-primary/10">
                 <Mail className="h-4 w-4 text-primary" />
               </div>
-              <span className="text-sm text-slate-600 dark:text-slate-300">info@intracenet.com</span>
+              <span className="text-sm text-slate-600 dark:text-slate-300">info@intracenetsolutions.com</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-full bg-primary/10">
                 <Phone className="h-4 w-4 text-primary" />
               </div>
-              <span className="text-sm text-slate-600 dark:text-slate-300">+254 700 123 456</span>
+              <span className="text-sm text-slate-600 dark:text-slate-300">+254 700 000 000</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-full bg-primary/10">
@@ -1048,15 +1062,27 @@ function ContactSection() {
           </p>
           
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
-                First Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter your first name"
-                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
-              />
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="John"
+                  className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  placeholder="Doe"
+                  className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
+                />
+              </div>
             </div>
             
             <div>
@@ -1065,9 +1091,47 @@ function ContactSection() {
               </label>
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="john@example.com"
                 className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
               />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                placeholder="+254 700 000 000"
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                Company
+              </label>
+              <input
+                type="text"
+                placeholder="Company Name"
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-300 mb-1">
+                Service Interested In
+              </label>
+              <select
+                className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all outline-none text-sm"
+              >
+                <option value="">Select a Service</option>
+                {services.map((service) => (
+                  <option key={service.title} value={service.title}>
+                    {service.title}
+                  </option>
+                ))}
+              </select>
             </div>
             
             <div>
